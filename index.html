@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DailyBoard | Home</title>
+<meta name="description" content="Daily rates, quick calculators, articles, and portfolio — all in one place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="index.html" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="navlinks" id="navLinks">
+    <a href="index.html" class="current">Home</a>
+    <a href="weather.html">Today's Rates</a>
+    <a href="calculator.html">Calculators</a>
+    <a href="article.html">Articles</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="board-wrap">
+    <div class="board">
+      <div class="board-eyebrow">— Welcome —</div>
+      <h1>Everything you need, in one place</h1>
+      <p class="tagline">Daily rates, practical calculators, articles, and a bit about who's behind this site.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Explore</div>
+      <h2>Where would you like to go?</h2>
+      <p>Pick a section below to get started.</p>
+    </div>
+    <div class="card-grid">
+      <a class="nav-card" href="weather.html">
+        <div class="emoji">📋</div>
+        <h3>Today's Rates</h3>
+        <p>Live weather plus current gold and silver rates at a glance.</p>
+        <span class="goto">View rates →</span>
+      </a>
+      <a class="nav-card" href="calculator.html">
+        <div class="emoji">🧮</div>
+        <h3>Calculators</h3>
+        <p>EMI, GPA, and age calculators — fast and accurate.</p>
+        <span class="goto">Open tools →</span>
+      </a>
+      <a class="nav-card" href="article.html">
+        <div class="emoji">✍️</div>
+        <h3>Articles</h3>
+        <p>Short reads on money, tech, and local updates.</p>
+        <span class="goto">Read articles →</span>
+      </a>
+      <a class="nav-card" href="about.html">
+        <div class="emoji">👤</div>
+        <h3>About</h3>
+        <p>Background, skills, and how to get in touch.</p>
+        <span class="goto">Learn more →</span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

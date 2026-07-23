@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="index.html" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="navlinks" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="weather.html">Today's Rates</a>
+    <a href="calculator.html">Calculators</a>
+    <a href="article.html">Articles</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Get in touch</div>
+      <h2>Contact</h2>
+      <p>Have a question, feedback, or a business inquiry? Reach out below.</p>
+    </div>
+    <div class="contact-card" style="max-width:480px;">
+      <h3>Email</h3>
+      <p style="font-size:14px; opacity:.85;">We usually reply within 2–3 business days.</p>
+      <a class="cbtn" href="mailto:youremail@example.com">Send an Email</a>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

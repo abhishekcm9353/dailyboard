@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="index.html" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="navlinks" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="weather.html">Today's Rates</a>
+    <a href="calculator.html">Calculators</a>
+    <a href="article.html">Articles</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Legal</div>
+      <h2>Privacy Policy</h2>
+      <p>Last updated: <span id="lastUpdated"></span></p>
+    </div>
+
+    <div class="calc-card" style="line-height:1.7; font-size:15px; color:rgba(34,32,27,0.8);">
+      <p><strong>Overview.</strong> DailyBoard ("we", "this site") respects your privacy. This page explains what information is collected when you visit and how it is used.</p>
+
+      <p><strong>Information we collect.</strong> This site may use your browser's location (only with your permission) to show local weather. This is used only in your browser and is not stored on any server we control.</p>
+
+      <p><strong>Cookies and ads.</strong> This site may use third-party advertising vendors, including Google, to serve ads. Google and its partners may use cookies to serve ads based on your visits to this and other sites. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google's Ads Settings</a>.</p>
+
+      <p><strong>Third-party services.</strong> This site uses the free Open-Meteo API to fetch weather data based on location coordinates. No personal data is sent beyond latitude/longitude.</p>
+
+      <p><strong>Your choices.</strong> You can disable location access anytime in your browser settings. You can also block cookies via your browser settings, though this may affect ad personalization.</p>
+
+      <p><strong>Contact.</strong> Questions about this policy can be sent via the <a href="about.html">About page</a> contact link.</p>
+
+      <p><strong>Changes.</strong> This policy may be updated from time to time. Continued use of the site after changes means you accept the updated policy.</p>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
+</script>
+</body>
+</html>

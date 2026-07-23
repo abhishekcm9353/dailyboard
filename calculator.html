@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculators | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="index.html" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="navlinks" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="weather.html">Today's Rates</a>
+    <a href="calculator.html" class="current">Calculators</a>
+    <a href="article.html">Articles</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Tools</div>
+      <h2>Calculators</h2>
+      <p>Three simple calculators for everyday use.</p>
+    </div>
+
+    <div class="calc-tabs" role="tablist">
+      <button class="calc-tab" role="tab" aria-selected="true" data-target="emi">EMI</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="gpa">GPA</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="age">Age</button>
+    </div>
+
+    <div class="calc-panel active" id="panel-emi">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="loanAmt">Loan Amount (₹)</label><input type="number" id="loanAmt" value="500000"></div>
+          <div class="field"><label for="loanRate">Interest Rate (% p.a.)</label><input type="number" id="loanRate" value="9.5" step="0.1"></div>
+          <div class="field"><label for="loanYears">Tenure (years)</label><input type="number" id="loanYears" value="5"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="emiOut">₹ 0 / month</div>
+          <div class="small" id="emiSub">Total payable: —</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-gpa">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="gpaSub1">Subject 1 marks (/100)</label><input type="number" id="gpaSub1" value="80"></div>
+          <div class="field"><label for="gpaSub2">Subject 2 marks (/100)</label><input type="number" id="gpaSub2" value="75"></div>
+          <div class="field"><label for="gpaSub3">Subject 3 marks (/100)</label><input type="number" id="gpaSub3" value="90"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="gpaOut">GPA: 0.0</div>
+          <div class="small">10-point scale (marks ÷ 9.5)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-age">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="dob">Date of Birth</label><input type="date" id="dob"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="ageOut">Select a date</div>
+          <div class="small" id="ageSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const tabs = document.querySelectorAll('.calc-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.setAttribute('aria-selected','false'));
+      tab.setAttribute('aria-selected','true');
+      document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + tab.dataset.target).classList.add('active');
+    });
+  });
+
+  function calcEMI(){
+    const P = parseFloat(document.getElementById('loanAmt').value) || 0;
+    const annualRate = parseFloat(document.getElementById('loanRate').value) || 0;
+    const years = parseFloat(document.getElementById('loanYears').value) || 0;
+    const r = annualRate / 12 / 100;
+    const n = years * 12;
+    if (P <= 0 || r <= 0 || n <= 0) {
+      document.getElementById('emiOut').textContent = '₹ 0 / month';
+      document.getElementById('emiSub').textContent = 'Enter valid values';
+      return;
+    }
+    const emi = P * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+    const total = emi * n;
+    document.getElementById('emiOut').textContent = `₹ ${emi.toFixed(0)} / month`;
+    document.getElementById('emiSub').textContent = `Total payable: ₹ ${total.toFixed(0)} (interest: ₹ ${(total-P).toFixed(0)})`;
+  }
+  ['loanAmt','loanRate','loanYears'].forEach(id => document.getElementById(id).addEventListener('input', calcEMI));
+  calcEMI();
+
+  function calcGPA(){
+    const marks = ['gpaSub1','gpaSub2','gpaSub3'].map(id => parseFloat(document.getElementById(id).value) || 0);
+    const gpas = marks.map(m => Math.min(10, m/9.5));
+    const avg = gpas.reduce((a,b)=>a+b,0) / gpas.length;
+    document.getElementById('gpaOut').textContent = `GPA: ${avg.toFixed(2)}`;
+  }
+  ['gpaSub1','gpaSub2','gpaSub3'].forEach(id => document.getElementById(id).addEventListener('input', calcGPA));
+  calcGPA();
+
+  document.getElementById('dob').addEventListener('change', (e) => {
+    const dob = new Date(e.target.value);
+    if (isNaN(dob)) return;
+    const today = new Date();
+    let years = today.getFullYear() - dob.getFullYear();
+    let months = today.getMonth() - dob.getMonth();
+    let days = today.getDate() - dob.getDate();
+    if (days < 0) { months -= 1; days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
+    if (months < 0) { years -= 1; months += 12; }
+    document.getElementById('ageOut').textContent = `${years} years, ${months} months, ${days} days`;
+    document.getElementById('ageSub').textContent = `Total days lived: ${Math.floor((today - dob) / 86400000)}`;
+  });
+</script>
+</body>
+</html>

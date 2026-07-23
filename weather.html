@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Today's Rates | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="index.html" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="navlinks" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="weather.html" class="current">Today's Rates</a>
+    <a href="calculator.html">Calculators</a>
+    <a href="article.html">Articles</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="board-wrap">
+    <div class="board">
+      <div class="board-eyebrow" id="todayDate">— Today's Board —</div>
+      <h1>Today's Rates</h1>
+      <p class="tagline">Weather, gold, and silver rates — updated at a glance.</p>
+      <div class="board-grid">
+        <div class="board-tile">
+          <div class="label">Weather</div>
+          <div class="value mono" id="weatherVal">Loading…</div>
+          <div class="sub" id="weatherSub">&nbsp;</div>
+        </div>
+        <div class="board-tile">
+          <div class="label">Feels Like</div>
+          <div class="value mono" id="feelsVal">—</div>
+          <div class="sub" id="conditionVal">&nbsp;</div>
+        </div>
+        <div class="board-tile">
+          <div class="label">Humidity / Wind</div>
+          <div class="value mono" id="humidityVal">—</div>
+          <div class="sub" id="windVal">&nbsp;</div>
+        </div>
+        <div class="board-tile">
+          <div class="label">Gold (24K / 10g) — Reference</div>
+          <div class="value gold mono" id="goldVal">₹ 1,45,080</div>
+          <div class="sub" id="goldDate">As of 23 Jul 2026 — check your local jeweller</div>
+        </div>
+        <div class="board-tile">
+          <div class="label">Silver (1 kg) — Reference</div>
+          <div class="value mono" id="silverVal">₹ 2,23,530</div>
+          <div class="sub" id="silverDate">As of 23 Jul 2026 — check your local jeweller</div>
+        </div>
+      </div>
+
+      <div class="board-note" style="margin-top:22px; margin-bottom:6px; opacity:.7;">3-Day Forecast</div>
+      <div class="board-grid" id="forecastGrid"></div>
+
+      <div class="board-note">Weather updates live based on your browser location. Gold and silver rates are reference values as of the date shown, not live market prices — always confirm the exact rate with your local jeweller or bank before any transaction. To update these numbers, edit goldVal / silverVal (and the date) in weather.html.</div>
+    </div>
+  </div>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-IN', {
+    weekday:'long', year:'numeric', month:'long', day:'numeric'
+  });
+
+  const WEATHER_CODES = {
+    0:'Clear sky', 1:'Mostly clear', 2:'Partly cloudy', 3:'Overcast',
+    45:'Fog', 48:'Fog', 51:'Light drizzle', 53:'Drizzle', 55:'Heavy drizzle',
+    61:'Light rain', 63:'Rain', 65:'Heavy rain', 66:'Freezing rain', 67:'Freezing rain',
+    71:'Light snow', 73:'Snow', 75:'Heavy snow', 77:'Snow grains',
+    80:'Light showers', 81:'Showers', 82:'Heavy showers',
+    95:'Thunderstorm', 96:'Thunderstorm w/ hail', 99:'Severe thunderstorm'
+  };
+  function describe(code){ return WEATHER_CODES[code] || 'Weather update'; }
+
+  function loadWeather(lat, lon, label){
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=4`)
+      .then(r => r.json())
+      .then(d => {
+        const c = d.current;
+        document.getElementById('weatherVal').textContent = `${c.temperature_2m}°C`;
+        document.getElementById('weatherSub').textContent = label || 'Your location';
+        document.getElementById('feelsVal').textContent = `${c.apparent_temperature}°C`;
+        document.getElementById('conditionVal').textContent = describe(c.weather_code);
+        document.getElementById('humidityVal').textContent = `${c.relative_humidity_2m}%`;
+        document.getElementById('windVal').textContent = `Wind: ${c.wind_speed_10m} km/h`;
+
+        const grid = document.getElementById('forecastGrid');
+        grid.innerHTML = '';
+        const days = d.daily.time.slice(1, 4); // skip today, show next 3
+        days.forEach((dateStr, i) => {
+          const idx = i + 1;
+          const dayLabel = new Date(dateStr).toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short' });
+          const tile = document.createElement('div');
+          tile.className = 'board-tile';
+          tile.innerHTML = `
+            <div class="label">${dayLabel}</div>
+            <div class="value mono">${d.daily.temperature_2m_max[idx]}° / ${d.daily.temperature_2m_min[idx]}°</div>
+            <div class="sub">${describe(d.daily.weather_code[idx])}</div>`;
+          grid.appendChild(tile);
+        });
+      })
+      .catch(() => {
+        document.getElementById('weatherVal').textContent = 'Unavailable';
+      });
+  }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => loadWeather(pos.coords.latitude, pos.coords.longitude, 'Your location'),
+      () => loadWeather(12.9716, 77.5946, 'Bengaluru (default)')
+    );
+  } else {
+    loadWeather(12.9716, 77.5946, 'Bengaluru (default)');
+  }
+</script>
+</body>
+</html>
