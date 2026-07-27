@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dailyboard-acm.vercel.app/sitemap.xml
