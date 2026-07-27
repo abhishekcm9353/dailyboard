@@ -20,7 +20,6 @@
     <a href="index.html">Home</a>
     <a href="weather.html">Today's Rates</a>
     <a href="calculator.html" class="current">Calculators</a>
-    <a href="article.html">Articles</a>
     <a href="about.html">About</a>
   </div>
 </nav>
@@ -30,13 +29,14 @@
     <div class="section-head">
       <div class="eyebrow">Tools</div>
       <h2>Calculators</h2>
-      <p>Three simple calculators for everyday use.</p>
+      <p>EMI, CGPA to percentage, age, and years of experience.</p>
     </div>
 
     <div class="calc-tabs" role="tablist">
       <button class="calc-tab" role="tab" aria-selected="true" data-target="emi">EMI</button>
-      <button class="calc-tab" role="tab" aria-selected="false" data-target="gpa">GPA</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="cgpa">CGPA → %</button>
       <button class="calc-tab" role="tab" aria-selected="false" data-target="age">Age</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="exp">Experience</button>
     </div>
 
     <div class="calc-panel active" id="panel-emi">
@@ -53,16 +53,14 @@
       </div>
     </div>
 
-    <div class="calc-panel" id="panel-gpa">
+    <div class="calc-panel" id="panel-cgpa">
       <div class="calc-card">
         <div class="field-row">
-          <div class="field"><label for="gpaSub1">Subject 1 marks (/100)</label><input type="number" id="gpaSub1" value="80"></div>
-          <div class="field"><label for="gpaSub2">Subject 2 marks (/100)</label><input type="number" id="gpaSub2" value="75"></div>
-          <div class="field"><label for="gpaSub3">Subject 3 marks (/100)</label><input type="number" id="gpaSub3" value="90"></div>
+          <div class="field"><label for="cgpaVal">Your CGPA (out of 10)</label><input type="number" id="cgpaVal" value="8.5" step="0.01" min="0" max="10"></div>
         </div>
         <div class="calc-result">
-          <div class="big" id="gpaOut">GPA: 0.0</div>
-          <div class="small">10-point scale (marks ÷ 9.5)</div>
+          <div class="big" id="cgpaOut">Percentage: 0%</div>
+          <div class="small">Formula used: Percentage = CGPA × 9.5 (standard 10-point scale conversion)</div>
         </div>
       </div>
     </div>
@@ -75,6 +73,19 @@
         <div class="calc-result">
           <div class="big" id="ageOut">Select a date</div>
           <div class="small" id="ageSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-exp">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="joinDate">Joining Date</label><input type="date" id="joinDate"></div>
+          <div class="field"><label for="endDate">As of Date (leave blank for today)</label><input type="date" id="endDate"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="expOut">Select a joining date</div>
+          <div class="small" id="expSub">&nbsp;</div>
         </div>
       </div>
     </div>
@@ -102,6 +113,7 @@
     });
   });
 
+  // ---- EMI ----
   function calcEMI(){
     const P = parseFloat(document.getElementById('loanAmt').value) || 0;
     const annualRate = parseFloat(document.getElementById('loanRate').value) || 0;
@@ -121,15 +133,16 @@
   ['loanAmt','loanRate','loanYears'].forEach(id => document.getElementById(id).addEventListener('input', calcEMI));
   calcEMI();
 
-  function calcGPA(){
-    const marks = ['gpaSub1','gpaSub2','gpaSub3'].map(id => parseFloat(document.getElementById(id).value) || 0);
-    const gpas = marks.map(m => Math.min(10, m/9.5));
-    const avg = gpas.reduce((a,b)=>a+b,0) / gpas.length;
-    document.getElementById('gpaOut').textContent = `GPA: ${avg.toFixed(2)}`;
+  // ---- CGPA to Percentage ----
+  function calcCGPA(){
+    const cgpa = parseFloat(document.getElementById('cgpaVal').value) || 0;
+    const pct = Math.min(100, Math.max(0, cgpa * 9.5));
+    document.getElementById('cgpaOut').textContent = `Percentage: ${pct.toFixed(2)}%`;
   }
-  ['gpaSub1','gpaSub2','gpaSub3'].forEach(id => document.getElementById(id).addEventListener('input', calcGPA));
-  calcGPA();
+  document.getElementById('cgpaVal').addEventListener('input', calcCGPA);
+  calcCGPA();
 
+  // ---- Age ----
   document.getElementById('dob').addEventListener('change', (e) => {
     const dob = new Date(e.target.value);
     if (isNaN(dob)) return;
@@ -142,6 +155,29 @@
     document.getElementById('ageOut').textContent = `${years} years, ${months} months, ${days} days`;
     document.getElementById('ageSub').textContent = `Total days lived: ${Math.floor((today - dob) / 86400000)}`;
   });
+
+  // ---- Years of Experience ----
+  function calcExperience(){
+    const joinVal = document.getElementById('joinDate').value;
+    if (!joinVal) return;
+    const join = new Date(joinVal);
+    const endVal = document.getElementById('endDate').value;
+    const end = endVal ? new Date(endVal) : new Date();
+    if (isNaN(join) || isNaN(end) || end < join) {
+      document.getElementById('expOut').textContent = 'Check the dates entered';
+      document.getElementById('expSub').textContent = '&nbsp;';
+      return;
+    }
+    let years = end.getFullYear() - join.getFullYear();
+    let months = end.getMonth() - join.getMonth();
+    let days = end.getDate() - join.getDate();
+    if (days < 0) { months -= 1; days += new Date(end.getFullYear(), end.getMonth(), 0).getDate(); }
+    if (months < 0) { years -= 1; months += 12; }
+    document.getElementById('expOut').textContent = `${years} years, ${months} months, ${days} days`;
+    document.getElementById('expSub').textContent = `Total experience in months: ${(years*12+months)} · Total days: ${Math.floor((end - join) / 86400000)}`;
+  }
+  document.getElementById('joinDate').addEventListener('change', calcExperience);
+  document.getElementById('endDate').addEventListener('change', calcExperience);
 </script>
 </body>
 </html>

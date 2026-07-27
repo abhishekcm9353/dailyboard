@@ -165,3 +165,24 @@ footer{
 
 footer a{color:var(--leaf); font-weight:600; text-decoration:none; margin:0 4px;}
 footer a:hover{text-decoration:underline;}
+
+/* ---- Ticker + Rate table (goodreturns-style) ---- */
+.ticker-bar{
+  background:var(--indigo); color:var(--chalk); display:flex; overflow-x:auto;
+  font-family:'IBM Plex Mono',monospace; font-size:13px; border-radius:10px;
+  margin:18px auto 0; max-width:1040px;
+}
+.ticker-item{padding:12px 20px; border-right:1px solid rgba(244,241,230,0.15); white-space:nowrap; flex-shrink:0;}
+.ticker-item .t-label{opacity:.6; margin-right:6px;}
+.change-up{color:#3FAE5A; font-weight:600;}
+.change-down{color:#E0554C; font-weight:600;}
+.change-flat{color:rgba(244,241,230,0.55); font-weight:600;}
+
+.rate-table-wrap{overflow-x:auto; margin-top:10px;}
+.rate-table{width:100%; border-collapse:collapse; background:#fff; border-radius:14px; overflow:hidden; border:1px solid var(--line); min-width:520px;}
+.rate-table th,.rate-table td{padding:13px 16px; text-align:left; font-size:14px; border-bottom:1px solid var(--line);}
+.rate-table thead th{background:var(--paper-dim); text-transform:uppercase; font-size:11px; letter-spacing:.06em; color:rgba(34,32,27,.6); font-weight:700;}
+.rate-table td.num, .rate-table th.num{font-family:'IBM Plex Mono',monospace;}
+.rate-table tbody tr:last-child td{border-bottom:none;}
+.rate-table tbody tr:hover{background:var(--paper-dim);}
+.rate-caption{font-size:12px; color:rgba(34,32,27,0.5); margin-top:10px;}
