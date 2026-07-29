@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous" </script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -18,7 +18,8 @@
   <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="navlinks" id="navLinks">
     <a href="index.html">Home</a>
-    <a href="weather.html">Today's Rates</a>
+    <a href="weather.html">Weather</a>
+    <a href="rates.html">Rates</a>
     <a href="calculator.html" class="current">Calculators</a>
     <a href="about.html">About</a>
   </div>
@@ -68,10 +69,13 @@
     <div class="calc-panel" id="panel-age">
       <div class="calc-card">
         <div class="field-row">
-          <div class="field"><label for="dob">Date of Birth</label><input type="date" id="dob"></div>
+          <div class="field">
+            <label for="dob">Date of Birth (DD/MM/YYYY)</label>
+            <input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10" inputmode="numeric">
+          </div>
         </div>
         <div class="calc-result">
-          <div class="big" id="ageOut">Select a date</div>
+          <div class="big" id="ageOut">Type a date, e.g. 15/08/1995</div>
           <div class="small" id="ageSub">&nbsp;</div>
         </div>
       </div>
@@ -80,11 +84,17 @@
     <div class="calc-panel" id="panel-exp">
       <div class="calc-card">
         <div class="field-row">
-          <div class="field"><label for="joinDate">Joining Date</label><input type="date" id="joinDate"></div>
-          <div class="field"><label for="endDate">As of Date (leave blank for today)</label><input type="date" id="endDate"></div>
+          <div class="field">
+            <label for="joinDate">Joining Date (DD/MM/YYYY)</label>
+            <input type="text" id="joinDate" placeholder="DD/MM/YYYY" maxlength="10" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="endDate">As of Date (leave blank for today)</label>
+            <input type="text" id="endDate" placeholder="DD/MM/YYYY" maxlength="10" inputmode="numeric">
+          </div>
         </div>
         <div class="calc-result">
-          <div class="big" id="expOut">Select a joining date</div>
+          <div class="big" id="expOut">Type your joining date, e.g. 01/06/2022</div>
           <div class="small" id="expSub">&nbsp;</div>
         </div>
       </div>

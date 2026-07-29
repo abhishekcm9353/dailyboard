@@ -186,3 +186,11 @@ footer a:hover{text-decoration:underline;}
 .rate-table tbody tr:last-child td{border-bottom:none;}
 .rate-table tbody tr:hover{background:var(--paper-dim);}
 .rate-caption{font-size:12px; color:rgba(34,32,27,0.5); margin-top:10px;}
+
+/* Light-background tiles for sections outside the dark board (fixes invisible-text forecast bug) */
+.light-tiles .board-tile{
+  background:#fff; border:1px solid var(--line); box-shadow:none;
+}
+.light-tiles .board-tile .label{color:rgba(34,32,27,0.55);}
+.light-tiles .board-tile .value{color:var(--indigo);}
+.light-tiles .board-tile .sub{color:rgba(34,32,27,0.5);}

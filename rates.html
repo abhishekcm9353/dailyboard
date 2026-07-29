@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rates | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="index.html" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="navlinks" id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="weather.html">Weather</a>
+    <a href="rates.html" class="current">Rates</a>
+    <a href="calculator.html">Calculators</a>
+    <a href="about.html">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="board-wrap">
+    <div class="board">
+      <div class="board-eyebrow">— Live Rates —</div>
+      <h1>Gold, Silver &amp; Platinum</h1>
+      <p class="tagline">Live spot prices, converted to INR, updated automatically.</p>
+    </div>
+  </div>
+
+  <div class="ticker-bar" id="tickerBar">
+    <div class="ticker-item"><span class="t-label">22K Gold</span> Loading…</div>
+    <div class="ticker-item"><span class="t-label">Silver</span> Loading…</div>
+    <div class="ticker-item"><span class="t-label">Platinum</span> Loading…</div>
+    <div class="ticker-item"><span class="t-label">USD</span> Loading…</div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Live Rates</div>
+      <h2>Gold, Silver &amp; Platinum Rate Today</h2>
+      <p id="rateDateLine">Loading today's rates…</p>
+    </div>
+
+    <div class="rate-table-wrap">
+      <table class="rate-table">
+        <thead>
+          <tr>
+            <th>Metal</th>
+            <th class="num">Per Gram</th>
+            <th class="num">Per 8 Grams</th>
+            <th class="num">Per 10 Grams</th>
+            <th class="num">Change</th>
+          </tr>
+        </thead>
+        <tbody id="rateTableBody">
+          <tr><td colspan="5">Loading live rates…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rate-caption">Rates are live international spot prices converted to INR, for reference only — they exclude making charges, GST, TCS, and local jeweller premiums. Always confirm exact prices with your local jeweller before any transaction.</div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const TROY_OUNCE_GRAMS = 31.1034768;
+  const CACHE_KEY = 'dailyboard_metals_cache_v1';
+  const HISTORY_KEY = 'dailyboard_metals_history_v1';
+  const CACHE_MS = 30 * 60 * 1000;
+
+  async function fetchMetalUSD(symbol){
+    const res = await fetch(`https://api.gold-api.com/price/${symbol}`);
+    if (!res.ok) throw new Error('metal fetch failed');
+    const data = await res.json();
+    return data.price;
+  }
+
+  async function fetchUsdToInr(){
+    const res = await fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=INR');
+    if (!res.ok) throw new Error('fx fetch failed');
+    const data = await res.json();
+    return data.rates.INR;
+  }
+
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+  function changeCell(current, previous){
+    if (previous == null) return '<span class="change-flat">—</span>';
+    const diff = current - previous;
+    if (Math.abs(diff) < 0.5) return '<span class="change-flat">▬ No change</span>';
+    const cls = diff > 0 ? 'change-up' : 'change-down';
+    const arrow = diff > 0 ? '▲' : '▼';
+    return `<span class="${cls}">${arrow} ₹${Math.abs(Math.round(diff)).toLocaleString('en-IN')}</span>`;
+  }
+
+  async function loadMetals(){
+    let goldUSD, silverUSD, platinumUSD, usdInr, updatedAt;
+    try {
+      const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+      if (cached && (Date.now() - cached.ts) < CACHE_MS) {
+        ({ gold: goldUSD, silver: silverUSD, platinum: platinumUSD, usdInr } = cached);
+        updatedAt = new Date(cached.ts);
+      } else {
+        [goldUSD, silverUSD, platinumUSD, usdInr] = await Promise.all([
+          fetchMetalUSD('XAU'), fetchMetalUSD('XAG'), fetchMetalUSD('XPT'), fetchUsdToInr()
+        ]);
+        updatedAt = new Date();
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ gold: goldUSD, silver: silverUSD, platinum: platinumUSD, usdInr, ts: updatedAt.getTime() }));
+      }
+    } catch (e) {
+      document.getElementById('rateTableBody').innerHTML = '<tr><td colspan="5">Live rate feed unavailable right now — please refresh in a bit.</td></tr>';
+      document.getElementById('tickerBar').innerHTML = '<div class="ticker-item">Live rates unavailable</div>';
+      return;
+    }
+
+    const goldPerGram24k = (goldUSD / TROY_OUNCE_GRAMS) * usdInr;
+    const goldPerGram22k = goldPerGram24k * 0.916;
+    const goldPerGram18k = goldPerGram24k * 0.75;
+    const silverPerGram = (silverUSD / TROY_OUNCE_GRAMS) * usdInr;
+    const platinumPerGram = (platinumUSD / TROY_OUNCE_GRAMS) * usdInr;
+
+    const today = todayStr();
+    let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || 'null');
+    const prev = (history && history.date !== today) ? history : (history && history.date === today ? history.prevOfDay : null);
+    if (!history || history.date !== today) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify({
+        date: today,
+        prevOfDay: history || null,
+        gold24: goldPerGram24k, gold22: goldPerGram22k, gold18: goldPerGram18k,
+        silver: silverPerGram, platinum: platinumPerGram
+      }));
+    }
+    const prevData = prev;
+
+    document.getElementById('tickerBar').innerHTML = `
+      <div class="ticker-item"><span class="t-label">22K Gold</span> ₹${Math.round(goldPerGram22k).toLocaleString('en-IN')}/gm</div>
+      <div class="ticker-item"><span class="t-label">Silver</span> ₹${Math.round(silverPerGram*1000).toLocaleString('en-IN')}/kg</div>
+      <div class="ticker-item"><span class="t-label">Platinum</span> ₹${Math.round(platinumPerGram).toLocaleString('en-IN')}/gm</div>
+      <div class="ticker-item"><span class="t-label">USD</span> ₹${usdInr.toFixed(2)}</div>
+    `;
+
+    document.getElementById('rateDateLine').textContent =
+      `Live rates as of ${updatedAt.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}, ${updatedAt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`;
+
+    function row(name, perGram, prevPerGram){
+      return `<tr>
+        <td>${name}</td>
+        <td class="num">₹${Math.round(perGram).toLocaleString('en-IN')}</td>
+        <td class="num">₹${Math.round(perGram*8).toLocaleString('en-IN')}</td>
+        <td class="num">₹${Math.round(perGram*10).toLocaleString('en-IN')}</td>
+        <td class="num">${changeCell(perGram, prevPerGram ? prevPerGram : null)}</td>
+      </tr>`;
+    }
+
+    document.getElementById('rateTableBody').innerHTML =
+      row('Gold 24K (99.9%)', goldPerGram24k, prevData ? prevData.gold24 : null) +
+      row('Gold 22K (91.6%)', goldPerGram22k, prevData ? prevData.gold22 : null) +
+      row('Gold 18K (75%)', goldPerGram18k, prevData ? prevData.gold18 : null) +
+      row('Silver', silverPerGram, prevData ? prevData.silver : null) +
+      row('Platinum', platinumPerGram, prevData ? prevData.platinum : null);
+  }
+
+  loadMetals();
+</script>
+</body>
+</html>
