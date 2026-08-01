@@ -34,6 +34,28 @@
 [data-theme="dark"] .light-tiles .board-tile .value{ color:var(--turmeric); }
 [data-theme="dark"] .rate-table td, [data-theme="dark"] .rate-table th{ color:var(--ink); border-color:var(--line); }
 [data-theme="dark"] .section-head p, [data-theme="dark"] .rate-caption, [data-theme="dark"] .board-note{ color:rgba(237,234,224,0.6); }
+[data-theme="dark"] .nav-card p{ color:rgba(237,234,224,0.65); }
+[data-theme="dark"] .field label{ color:rgba(237,234,224,0.55); }
+[data-theme="dark"] .pct-label{ color:rgba(237,234,224,0.55); }
+[data-theme="dark"] .about-lead{ color:rgba(237,234,224,0.75); }
+.policy-text{line-height:1.7; font-size:15px; color:rgba(34,32,27,0.8);}
+[data-theme="dark"] .policy-text{ color:rgba(237,234,224,0.8); }
+[data-theme="dark"] footer{ color:rgba(237,234,224,0.5); border-color:var(--line); }
+[data-theme="dark"] .light-tiles .board-tile .label{ color:rgba(237,234,224,0.55); }
+[data-theme="dark"] .light-tiles .board-tile .sub{ color:rgba(237,234,224,0.5); }
+[data-theme="dark"] .post p{ color:rgba(237,234,224,0.68); }
+[data-theme="dark"] .contact-card p{ color:rgba(244,241,230,0.85); }
+[data-theme="dark"] .port-wrap p{ color:rgba(237,234,224,0.75); }
+[data-theme="dark"] .brand{ color:var(--turmeric); }
+[data-theme="dark"] .navtoggle{ color:var(--ink); }
+[data-theme="dark"] .navlinks a.current{ border-color:var(--turmeric); }
+[data-theme="dark"] .section-head h2{ color:var(--ink); }
+[data-theme="dark"] .nav-card h3{ color:var(--ink); }
+[data-theme="dark"] .nav-card:hover, [data-theme="dark"] .nav-card:focus-visible{ border-color:var(--turmeric); }
+[data-theme="dark"] .post h3{ color:var(--ink); }
+[data-theme="dark"] .calc-tab{ background:var(--paper-dim); color:var(--ink); border-color:var(--line); }
+[data-theme="dark"] .calc-tab[aria-selected="true"]{ background:var(--turmeric); color:#1a1200; border-color:var(--turmeric); }
+[data-theme="dark"] .board-tile .label{ color:rgba(244,241,230,0.55); }
 
 .theme-toggle{
   background:none; border:1px solid var(--line); border-radius:999px; width:36px; height:36px;
@@ -148,6 +170,8 @@ section{max-width:1040px; margin:0 auto; padding:64px 24px;}
 }
 .field-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:18px;}
 .field label{display:block; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:rgba(34,32,27,0.55); margin-bottom:6px;}
+.pct-label{margin:0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:rgba(34,32,27,0.55);}
+.about-lead{color:rgba(34,32,27,0.75); font-size:15px;}
 .field input{
   width:100%; padding:11px 12px; border-radius:9px; border:1px solid var(--line);
   font-family:'IBM Plex Mono',monospace; font-size:15px; background:var(--paper);
