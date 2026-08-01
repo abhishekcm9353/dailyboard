@@ -7,8 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
 <!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"> </script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -16,6 +18,7 @@
 <nav>
   <a href="index.html" class="brand">Daily<span>Board</span></a>
   <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
   <div class="navlinks" id="navLinks">
     <a href="index.html">Home</a>
     <a href="weather.html">Weather</a>
@@ -48,6 +51,15 @@
   navToggle.addEventListener('click', () => {
     const open = navLinks.classList.toggle('open');
     navToggle.setAttribute('aria-expanded', open);
+  });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
   });
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>

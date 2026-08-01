@@ -9,6 +9,36 @@
   --leaf:#2F5233;
   --chalk:#F4F1E6;
   --line:rgba(34,32,27,0.14);
+  --card-bg:#ffffff;
+}
+[data-theme="dark"]{
+  --ink:#EDEAE0;
+  --paper:#15171C;
+  --paper-dim:#1E212A;
+  --indigo:#0F1826;
+  --indigo-2:#1C2740;
+  --line:rgba(237,234,224,0.14);
+  --card-bg:#1B1E26;
+}
+[data-theme="dark"] body{ background:var(--paper); color:var(--ink); }
+[data-theme="dark"] .calc-card, [data-theme="dark"] .post, [data-theme="dark"] .nav-card, [data-theme="dark"] .rate-table{
+  background:var(--card-bg); border-color:var(--line);
+}
+[data-theme="dark"] .field input, [data-theme="dark"] .field select{ background:var(--paper-dim); color:var(--ink); border-color:var(--line); }
+[data-theme="dark"] .rate-table thead th{ background:var(--paper-dim); }
+[data-theme="dark"] .rate-table tbody tr:hover{ background:var(--paper-dim); }
+[data-theme="dark"] .chip{ background:var(--paper-dim); border-color:var(--line); }
+[data-theme="dark"] nav{ background:var(--paper); border-color:var(--line); }
+[data-theme="dark"] .navlinks{ background:var(--paper); }
+[data-theme="dark"] .light-tiles .board-tile{ background:var(--card-bg); border-color:var(--line); }
+[data-theme="dark"] .light-tiles .board-tile .value{ color:var(--turmeric); }
+[data-theme="dark"] .rate-table td, [data-theme="dark"] .rate-table th{ color:var(--ink); border-color:var(--line); }
+[data-theme="dark"] .section-head p, [data-theme="dark"] .rate-caption, [data-theme="dark"] .board-note{ color:rgba(237,234,224,0.6); }
+
+.theme-toggle{
+  background:none; border:1px solid var(--line); border-radius:999px; width:36px; height:36px;
+  cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; color:var(--ink);
+  margin-left:10px;
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}

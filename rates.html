@@ -7,8 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
 <!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -16,6 +18,7 @@
 <nav>
   <a href="index.html" class="brand">Daily<span>Board</span></a>
   <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
   <div class="navlinks" id="navLinks">
     <a href="index.html">Home</a>
     <a href="weather.html">Weather</a>
@@ -64,7 +67,7 @@
         </tbody>
       </table>
     </div>
-    <div class="rate-caption">Rates are live international spot prices converted to INR, for reference only — they exclude making charges, GST, TCS, and local jeweller premiums. Always confirm exact prices with your local jeweller before any transaction.</div>
+    <div class="rate-caption">Rates are international spot prices converted to INR with India's import duty (~6%) and GST (3%) factored in, similar to how Indian bullion rates are quoted — but they still exclude jeweller making charges and city-specific premiums, so treat as reference rates and confirm exact prices locally before any transaction.</div>
   </section>
 </main>
 
@@ -77,11 +80,20 @@
     const open = navLinks.classList.toggle('open');
     navToggle.setAttribute('aria-expanded', open);
   });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
+  });
   document.getElementById('year').textContent = new Date().getFullYear();
 
   const TROY_OUNCE_GRAMS = 31.1034768;
-  const CACHE_KEY = 'dailyboard_metals_cache_v1';
-  const HISTORY_KEY = 'dailyboard_metals_history_v1';
+  const CACHE_KEY = 'dailyboard_metals_cache_v2';
+  const HISTORY_KEY = 'dailyboard_metals_history_v2';
   const CACHE_MS = 30 * 60 * 1000;
 
   async function fetchMetalUSD(symbol){
@@ -129,11 +141,14 @@
       return;
     }
 
-    const goldPerGram24k = (goldUSD / TROY_OUNCE_GRAMS) * usdInr;
+    // International spot converted to INR, then adjusted for India's import duty (~6%) and GST (3%)
+    // so the numbers land close to what Indian sites (GoodReturns etc.) quote, minus city-specific making charges.
+    const INDIA_DUTY_GST_MULTIPLIER = 1.11;
+    const goldPerGram24k = (goldUSD / TROY_OUNCE_GRAMS) * usdInr * INDIA_DUTY_GST_MULTIPLIER;
     const goldPerGram22k = goldPerGram24k * 0.916;
     const goldPerGram18k = goldPerGram24k * 0.75;
-    const silverPerGram = (silverUSD / TROY_OUNCE_GRAMS) * usdInr;
-    const platinumPerGram = (platinumUSD / TROY_OUNCE_GRAMS) * usdInr;
+    const silverPerGram = (silverUSD / TROY_OUNCE_GRAMS) * usdInr * INDIA_DUTY_GST_MULTIPLIER;
+    const platinumPerGram = (platinumUSD / TROY_OUNCE_GRAMS) * usdInr * INDIA_DUTY_GST_MULTIPLIER;
 
     const today = todayStr();
     let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || 'null');

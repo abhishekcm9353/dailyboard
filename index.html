@@ -8,8 +8,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
 <!-- Google AdSense: after approval, uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your real Publisher ID -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -17,6 +19,7 @@
 <nav>
   <a href="index.html" class="brand">Daily<span>Board</span></a>
   <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
   <div class="navlinks" id="navLinks">
     <a href="index.html" class="current">Home</a>
     <a href="weather.html">Weather</a>
@@ -32,6 +35,36 @@
       <div class="board-eyebrow">— Welcome —</div>
       <h1>Everything you need, in one place</h1>
       <p class="tagline">Live weather, gold, silver and platinum rates, plus practical calculators.</p>
+
+      <div style="margin-top:20px;">
+        <input type="text" id="toolSearch" placeholder="Search a tool… e.g. BMI, EMI, Currency" list="toolList"
+          style="width:100%; max-width:420px; padding:12px 16px; border-radius:10px; border:none; font-size:15px; font-family:'Inter',sans-serif; background:rgba(244,241,230,0.12); color:var(--chalk);">
+        <datalist id="toolList">
+          <option value="EMI Calculator">
+          <option value="CGPA to Percentage">
+          <option value="Age Calculator">
+          <option value="Experience Calculator">
+          <option value="Currency Converter">
+          <option value="Unit Converter">
+          <option value="BMI Calculator">
+          <option value="Simple Interest">
+          <option value="Compound Interest">
+          <option value="Tax Calculator">
+          <option value="Percentage Calculator">
+          <option value="Weather">
+          <option value="Gold Rate">
+          <option value="Silver Rate">
+          <option value="Platinum Rate">
+        </datalist>
+      </div>
+
+      <div class="board-grid" style="margin-top:20px;">
+        <div class="board-tile">
+          <div class="label">Next Holiday</div>
+          <div class="value mono" id="holidayName">—</div>
+          <div class="sub" id="holidayCountdown">&nbsp;</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -57,7 +90,7 @@
       <a class="nav-card" href="calculator.html">
         <div class="emoji">🧮</div>
         <h3>Calculators</h3>
-        <p>EMI, CGPA to percentage, age, and years of experience.</p>
+        <p>EMI, CGPA, age, experience, currency, units, and BMI.</p>
         <span class="goto">Open tools →</span>
       </a>
       <a class="nav-card" href="about.html">
@@ -79,7 +112,56 @@
     const open = navLinks.classList.toggle('open');
     navToggle.setAttribute('aria-expanded', open);
   });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
+  });
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- Tool search: jump straight to the right page ----
+  const TOOL_MAP = {
+    'emi calculator': 'calculator.html', 'cgpa to percentage': 'calculator.html',
+    'age calculator': 'calculator.html', 'experience calculator': 'calculator.html',
+    'currency converter': 'calculator.html', 'unit converter': 'calculator.html',
+    'bmi calculator': 'calculator.html', 'simple interest': 'calculator.html',
+    'compound interest': 'calculator.html', 'tax calculator': 'calculator.html',
+    'percentage calculator': 'calculator.html', 'weather': 'weather.html',
+    'gold rate': 'rates.html', 'silver rate': 'rates.html', 'platinum rate': 'rates.html'
+  };
+  const toolSearch = document.getElementById('toolSearch');
+  function jumpToTool(){
+    const key = toolSearch.value.trim().toLowerCase();
+    if (TOOL_MAP[key]) window.location.href = TOOL_MAP[key];
+  }
+  toolSearch.addEventListener('change', jumpToTool);
+  toolSearch.addEventListener('keydown', (e) => { if (e.key === 'Enter') jumpToTool(); });
+
+  // ---- Next Holiday Countdown (static list, no API needed) ----
+  const HOLIDAYS_2026 = [
+    { name: 'Independence Day', date: '2026-08-15' },
+    { name: 'Ganesh Chaturthi', date: '2026-09-14' },
+    { name: 'Gandhi Jayanti', date: '2026-10-02' },
+    { name: 'Dussehra', date: '2026-10-20' },
+    { name: 'Diwali', date: '2026-11-08' },
+    { name: 'Christmas', date: '2026-12-25' },
+    { name: "New Year's Day", date: '2027-01-01' },
+    { name: 'Republic Day', date: '2027-01-26' }
+  ];
+  const today = new Date(); today.setHours(0,0,0,0);
+  const upcoming = HOLIDAYS_2026
+    .map(h => ({ ...h, diff: Math.ceil((new Date(h.date) - today) / 86400000) }))
+    .filter(h => h.diff >= 0)
+    .sort((a,b) => a.diff - b.diff)[0];
+  if (upcoming) {
+    document.getElementById('holidayName').textContent = upcoming.name;
+    document.getElementById('holidayCountdown').textContent =
+      upcoming.diff === 0 ? "It's today!" : `In ${upcoming.diff} day${upcoming.diff===1?'':'s'} · ${new Date(upcoming.date).toLocaleDateString('en-IN',{day:'numeric',month:'long'})}`;
+  }
 </script>
 </body>
 </html>
