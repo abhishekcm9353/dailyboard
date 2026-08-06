@@ -12,6 +12,13 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
 </head>
 <body>
+<div id="introScreen" style="position:fixed; inset:0; background:var(--indigo); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity .6s ease;">
+  <div style="font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(38px,9vw,84px); color:var(--chalk); letter-spacing:1px; display:flex;">
+    <span id="introText"></span><span id="introCursor" style="display:inline-block; width:0.06em; margin-left:4px; background:var(--turmeric); animation:introBlink 0.8s step-end infinite;">&nbsp;</span>
+  </div>
+</div>
+<style>@keyframes introBlink{50%{opacity:0;}}</style>
+
 <a href="#main" class="skip-link">Skip to content</a>
 
 <nav>
@@ -88,7 +95,7 @@
       <a class="nav-card" href="calculator.html">
         <div class="emoji">🧮</div>
         <h3>Calculators</h3>
-        <p>EMI, CGPA, age, experience, currency, units, and BMI.</p>
+        <p>10+ calculators plus a to-do list — EMI, SIP, GST, tax, and more.</p>
         <span class="goto">Open tools →</span>
       </a>
       <a class="nav-card" href="about.html">
@@ -119,6 +126,31 @@
     else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
     applyThemeIcon();
   });
+  // ---- Intro typing animation ----
+  (function(){
+    const text = 'DailyBoard';
+    const introText = document.getElementById('introText');
+    const introScreen = document.getElementById('introScreen');
+    document.body.style.overflow = 'hidden';
+    let i = 0;
+    function typeNext(){
+      if (i < text.length) {
+        introText.textContent += text[i];
+        i++;
+        setTimeout(typeNext, 90);
+      } else {
+        setTimeout(() => {
+          introScreen.style.opacity = '0';
+          setTimeout(() => {
+            introScreen.style.display = 'none';
+            document.body.style.overflow = '';
+          }, 600);
+        }, 500);
+      }
+    }
+    setTimeout(typeNext, 200);
+  })();
+
   document.getElementById('year').textContent = new Date().getFullYear();
 
   // ---- Tool search: jump straight to the right page ----

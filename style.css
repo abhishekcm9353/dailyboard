@@ -12,13 +12,17 @@
   --card-bg:#ffffff;
 }
 [data-theme="dark"]{
-  --ink:#EDEAE0;
-  --paper:#15171C;
-  --paper-dim:#1E212A;
-  --indigo:#0F1826;
-  --indigo-2:#1C2740;
-  --line:rgba(237,234,224,0.14);
-  --card-bg:#1B1E26;
+  --ink:#E6EDF3;
+  --paper:#0A1420;
+  --paper-dim:#0F1F33;
+  --indigo:#071A2E;
+  --indigo-2:#0F2A45;
+  --turmeric:#2D9CDB;
+  --turmeric-dim:#1E88E5;
+  --leaf:#1B6FA8;
+  --chalk:#F0F6FC;
+  --line:rgba(230,237,243,0.14);
+  --card-bg:#0F1F33;
 }
 [data-theme="dark"] body{ background:var(--paper); color:var(--ink); }
 [data-theme="dark"] .calc-card, [data-theme="dark"] .post, [data-theme="dark"] .nav-card, [data-theme="dark"] .rate-table{
@@ -54,13 +58,19 @@
 [data-theme="dark"] .nav-card:hover, [data-theme="dark"] .nav-card:focus-visible{ border-color:var(--turmeric); }
 [data-theme="dark"] .post h3{ color:var(--ink); }
 [data-theme="dark"] .calc-tab{ background:var(--paper-dim); color:var(--ink); border-color:var(--line); }
-[data-theme="dark"] .calc-tab[aria-selected="true"]{ background:var(--turmeric); color:#1a1200; border-color:var(--turmeric); }
+[data-theme="dark"] .calc-tab[aria-selected="true"]{ background:var(--turmeric); color:#071A2E; border-color:var(--turmeric); }
 [data-theme="dark"] .board-tile .label{ color:rgba(244,241,230,0.55); }
 
 .theme-toggle{
-  background:none; border:1px solid var(--line); border-radius:999px; width:36px; height:36px;
-  cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; color:var(--ink);
-  margin-left:10px;
+  background:var(--paper); border:1px solid var(--line); border-radius:999px; width:42px; height:42px;
+  cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; color:var(--ink);
+  position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:60;
+  box-shadow:0 4px 14px rgba(0,0,0,0.15);
+  transition:transform .2s;
+}
+.theme-toggle:hover{ transform:translateY(-50%) scale(1.08); }
+@media (max-width:720px){
+  .theme-toggle{ right:14px; top:auto; bottom:18px; width:44px; height:44px; }
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}

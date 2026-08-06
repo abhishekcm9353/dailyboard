@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="style.css">
 <script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -31,7 +32,7 @@
     <div class="section-head">
       <div class="eyebrow">Tools</div>
       <h2>Calculators</h2>
-      <p>EMI, CGPA to percentage, age, experience, currency, units, and BMI.</p>
+      <p>EMI, CGPA, age, experience, currency, units, BMI, interest, tax, percentage, SIP, GST, and a to-do list.</p>
     </div>
 
     <div class="calc-tabs" role="tablist">
@@ -45,6 +46,14 @@
       <button class="calc-tab" role="tab" aria-selected="false" data-target="interest">Interest</button>
       <button class="calc-tab" role="tab" aria-selected="false" data-target="tax">Tax (India)</button>
       <button class="calc-tab" role="tab" aria-selected="false" data-target="pct">Percentage</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="sip">SIP</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="gst">GST</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="todo">To-Do</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="qr">QR Code</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="discount">Discount</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="wordcount">Word Count</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="spin">Spin Wheel</button>
+      <button class="calc-tab" role="tab" aria-selected="false" data-target="tz">Time Zones</button>
     </div>
 
     <div class="calc-panel active" id="panel-emi">
@@ -225,6 +234,144 @@
         <div class="calc-result">
           <div class="big" id="pctOut2">0%</div>
         </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-sip">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="sipAmt">Monthly Investment (₹)</label><input type="number" id="sipAmt" value="5000"></div>
+          <div class="field"><label for="sipRate">Expected Annual Return (%)</label><input type="number" id="sipRate" value="12" step="0.1"></div>
+          <div class="field"><label for="sipYears">Time Period (years)</label><input type="number" id="sipYears" value="10"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="sipOut">₹ 0</div>
+          <div class="small" id="sipSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-gst">
+      <div class="calc-card">
+        <div class="calc-tabs" role="tablist" style="margin-bottom:14px;">
+          <button class="calc-tab" role="tab" aria-selected="true" data-gst="add">Add GST</button>
+          <button class="calc-tab" role="tab" aria-selected="false" data-gst="remove">Remove GST</button>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="gstAmt" id="gstAmtLabel">Amount (excl. GST)</label><input type="number" id="gstAmt" value="1000"></div>
+          <div class="field">
+            <label for="gstRate">GST Rate</label>
+            <select id="gstRate" style="width:100%; padding:11px 12px; border-radius:9px; border:1px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:15px; background:var(--paper);">
+              <option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="gstOut">₹ 0</div>
+          <div class="small" id="gstSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-todo">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field" style="grid-column:1/-1;">
+            <label for="todoInput">Add a task</label>
+            <div style="display:flex; gap:10px;">
+              <input type="text" id="todoInput" placeholder="e.g. Pay electricity bill" style="flex:1;">
+              <button id="todoAddBtn" class="calc-tab" aria-selected="true" style="cursor:pointer; white-space:nowrap;">Add</button>
+            </div>
+          </div>
+        </div>
+        <div id="todoList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        <div class="rate-caption" style="margin-top:14px;">Saved only in this browser on this device — not synced anywhere else.</div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-qr">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field" style="grid-column:1/-1;">
+            <label for="qrInput">Text or URL</label>
+            <input type="text" id="qrInput" placeholder="https://example.com" value="https://dailyboard-acm.vercel.app">
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:14px; padding:20px 0;">
+          <div id="qrBox" style="background:#fff; padding:16px; border-radius:12px;"></div>
+          <button id="qrDownload" class="calc-tab" aria-selected="true" style="cursor:pointer;">Download PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-discount">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="discPrice">Original Price (₹)</label><input type="number" id="discPrice" value="1000"></div>
+          <div class="field"><label for="discPct">Discount (%)</label><input type="number" id="discPct" value="20"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="discOut">₹ 0</div>
+          <div class="small" id="discSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-wordcount">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field" style="grid-column:1/-1;">
+            <label for="wcInput">Paste or type your text</label>
+            <textarea id="wcInput" rows="8" placeholder="Start typing…" style="width:100%; padding:12px; border-radius:9px; border:1px solid var(--line); font-size:15px; background:var(--paper); font-family:'Inter',sans-serif; resize:vertical;"></textarea>
+          </div>
+        </div>
+        <div class="board-grid light-tiles">
+          <div class="board-tile">
+            <div class="label">Words</div>
+            <div class="value mono" id="wcWords">0</div>
+          </div>
+          <div class="board-tile">
+            <div class="label">Characters</div>
+            <div class="value mono" id="wcChars">0</div>
+          </div>
+          <div class="board-tile">
+            <div class="label">Sentences</div>
+            <div class="value mono" id="wcSentences">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-spin">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field" style="grid-column:1/-1;">
+            <label for="spinInput">Options (comma separated)</label>
+            <input type="text" id="spinInput" value="Pizza, Burger, Sushi, Tacos, Biryani, Pasta">
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:16px; padding:10px 0;">
+          <div style="position:relative;">
+            <canvas id="spinCanvas" width="280" height="280" style="transition:transform 4s cubic-bezier(0.17,0.67,0.12,0.99);"></canvas>
+            <div style="position:absolute; top:-4px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:12px solid transparent; border-right:12px solid transparent; border-top:20px solid var(--turmeric-dim);"></div>
+          </div>
+          <button id="spinBtn" class="calc-tab" aria-selected="true" style="cursor:pointer; padding:11px 28px;">Spin the Wheel</button>
+          <div class="calc-result" style="width:100%; text-align:center;">
+            <div class="big" id="spinOut">Add options and spin!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-tz">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field" style="grid-column:1/-1;">
+            <label for="tzInput">Date &amp; Time (your local time)</label>
+            <input type="datetime-local" id="tzInput">
+          </div>
+        </div>
+        <div class="board-grid light-tiles" id="tzGrid"></div>
       </div>
     </div>
   </section>
@@ -522,6 +669,235 @@
   ['pctX1','pctY1'].forEach(id => document.getElementById(id).addEventListener('input', calcPct1));
   ['pctX2','pctY2'].forEach(id => document.getElementById(id).addEventListener('input', calcPct2));
   calcPct1(); calcPct2();
+
+  // ---- SIP Calculator ----
+  function calcSIP(){
+    const P = parseFloat(document.getElementById('sipAmt').value) || 0;
+    const annualRate = parseFloat(document.getElementById('sipRate').value) || 0;
+    const years = parseFloat(document.getElementById('sipYears').value) || 0;
+    const r = annualRate / 12 / 100;
+    const n = years * 12;
+    if (P <= 0 || r <= 0 || n <= 0) {
+      document.getElementById('sipOut').textContent = '₹ 0';
+      document.getElementById('sipSub').textContent = 'Enter valid values';
+      return;
+    }
+    const FV = P * ((Math.pow(1+r, n) - 1) / r) * (1+r);
+    const invested = P * n;
+    const gain = FV - invested;
+    document.getElementById('sipOut').textContent = `₹ ${Math.round(FV).toLocaleString('en-IN')}`;
+    document.getElementById('sipSub').textContent = `Invested: ₹${Math.round(invested).toLocaleString('en-IN')} · Wealth gained: ₹${Math.round(gain).toLocaleString('en-IN')}`;
+  }
+  ['sipAmt','sipRate','sipYears'].forEach(id => document.getElementById(id).addEventListener('input', calcSIP));
+  calcSIP();
+
+  // ---- GST Calculator ----
+  let gstMode = 'add';
+  const gstTabs = document.querySelectorAll('.calc-tab[data-gst]');
+  gstTabs.forEach(t => {
+    t.addEventListener('click', () => {
+      gstTabs.forEach(u => u.setAttribute('aria-selected','false'));
+      t.setAttribute('aria-selected','true');
+      gstMode = t.dataset.gst;
+      document.getElementById('gstAmtLabel').textContent = gstMode === 'add' ? 'Amount (excl. GST)' : 'Amount (incl. GST)';
+      calcGST();
+    });
+  });
+  function calcGST(){
+    const amt = parseFloat(document.getElementById('gstAmt').value) || 0;
+    const rate = parseFloat(document.getElementById('gstRate').value) || 0;
+    if (gstMode === 'add') {
+      const gstAmount = amt * rate / 100;
+      document.getElementById('gstOut').textContent = `₹ ${(amt + gstAmount).toFixed(2)}`;
+      document.getElementById('gstSub').textContent = `GST (${rate}%): ₹${gstAmount.toFixed(2)} added to ₹${amt.toFixed(2)}`;
+    } else {
+      const base = amt / (1 + rate/100);
+      const gstAmount = amt - base;
+      document.getElementById('gstOut').textContent = `₹ ${base.toFixed(2)}`;
+      document.getElementById('gstSub').textContent = `GST (${rate}%): ₹${gstAmount.toFixed(2)} removed from ₹${amt.toFixed(2)}`;
+    }
+  }
+  ['gstAmt','gstRate'].forEach(id => document.getElementById(id).addEventListener('input', calcGST));
+  calcGST();
+
+  // ---- To-Do List (this browser only) ----
+  const TODO_KEY = 'dailyboard_todos';
+  function getTodos(){ try { return JSON.parse(localStorage.getItem(TODO_KEY)) || []; } catch(e){ return []; } }
+  function saveTodos(list){ localStorage.setItem(TODO_KEY, JSON.stringify(list)); }
+  function renderTodos(){
+    const list = getTodos();
+    const wrap = document.getElementById('todoList');
+    wrap.innerHTML = '';
+    if (list.length === 0) {
+      wrap.innerHTML = '<p style="font-size:13px; color:var(--ink); opacity:0.5;">No tasks yet — add one above.</p>';
+      return;
+    }
+    list.forEach((task, i) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--paper-dim); border-radius:9px;';
+      row.innerHTML = `
+        <input type="checkbox" ${task.done ? 'checked' : ''} data-idx="${i}" class="todo-check" style="width:18px; height:18px;">
+        <span style="flex:1; font-size:14px; ${task.done ? 'text-decoration:line-through; opacity:.5;' : ''}">${task.text}</span>
+        <a href="#" data-idx="${i}" class="todo-del" style="color:#b3401f; font-size:13px; font-weight:600; text-decoration:none;">Remove</a>`;
+      wrap.appendChild(row);
+    });
+    wrap.querySelectorAll('.todo-check').forEach(cb => cb.addEventListener('change', () => {
+      const list = getTodos();
+      list[+cb.dataset.idx].done = cb.checked;
+      saveTodos(list);
+      renderTodos();
+    }));
+    wrap.querySelectorAll('.todo-del').forEach(a => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const list = getTodos();
+      list.splice(+a.dataset.idx, 1);
+      saveTodos(list);
+      renderTodos();
+    }));
+  }
+  function addTodo(){
+    const input = document.getElementById('todoInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const list = getTodos();
+    list.push({ text, done: false });
+    saveTodos(list);
+    input.value = '';
+    renderTodos();
+  }
+  document.getElementById('todoAddBtn').addEventListener('click', addTodo);
+  document.getElementById('todoInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') addTodo(); });
+  renderTodos();
+
+  // ---- QR Code Generator (qrcode.js library, client-side) ----
+  let qrInstance = null;
+  function renderQR(){
+    const text = document.getElementById('qrInput').value.trim() || 'https://example.com';
+    const box = document.getElementById('qrBox');
+    box.innerHTML = '';
+    qrInstance = new QRCode(box, { text, width: 200, height: 200, colorDark: '#1B2A4A', colorLight: '#ffffff' });
+  }
+  document.getElementById('qrInput').addEventListener('input', renderQR);
+  document.getElementById('qrDownload').addEventListener('click', () => {
+    const img = document.querySelector('#qrBox img') || document.querySelector('#qrBox canvas');
+    if (!img) return;
+    const link = document.createElement('a');
+    link.download = 'qrcode.png';
+    link.href = img.tagName === 'CANVAS' ? img.toDataURL('image/png') : img.src;
+    link.click();
+  });
+  renderQR();
+
+  // ---- Discount Calculator ----
+  function calcDiscount(){
+    const price = parseFloat(document.getElementById('discPrice').value) || 0;
+    const pct = parseFloat(document.getElementById('discPct').value) || 0;
+    const saved = price * pct / 100;
+    const final = price - saved;
+    document.getElementById('discOut').textContent = `₹ ${final.toFixed(2)}`;
+    document.getElementById('discSub').textContent = `You save ₹${saved.toFixed(2)} off ₹${price.toFixed(2)}`;
+  }
+  ['discPrice','discPct'].forEach(id => document.getElementById(id).addEventListener('input', calcDiscount));
+  calcDiscount();
+
+  // ---- Word / Character Counter ----
+  function calcWordCount(){
+    const text = document.getElementById('wcInput').value;
+    const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    const chars = text.length;
+    const sentences = text.trim() === '' ? 0 : (text.match(/[.!?]+(\s|$)/g) || []).length || (text.trim() ? 1 : 0);
+    document.getElementById('wcWords').textContent = words;
+    document.getElementById('wcChars').textContent = chars;
+    document.getElementById('wcSentences').textContent = sentences;
+  }
+  document.getElementById('wcInput').addEventListener('input', calcWordCount);
+  calcWordCount();
+
+  // ---- Spin Wheel ----
+  const spinCanvas = document.getElementById('spinCanvas');
+  const spinCtx = spinCanvas.getContext('2d');
+  const SPIN_COLORS = ['#1B2A4A','#E8A33D','#2F5233','#C98A2C','#28395E','#3FAE5A','#E0554C','#7A5AA3'];
+  let spinOptions = [];
+  let currentRotation = 0;
+  let spinning = false;
+
+  function drawWheel(){
+    spinOptions = document.getElementById('spinInput').value.split(',').map(s => s.trim()).filter(Boolean);
+    if (spinOptions.length === 0) spinOptions = ['Option 1', 'Option 2'];
+    const n = spinOptions.length;
+    const r = 140, cx = 140, cy = 140;
+    spinCtx.clearRect(0,0,280,280);
+    const slice = (2*Math.PI) / n;
+    spinOptions.forEach((label, i) => {
+      const start = i * slice, end = start + slice;
+      spinCtx.beginPath();
+      spinCtx.moveTo(cx,cy);
+      spinCtx.arc(cx,cy,r,start,end);
+      spinCtx.closePath();
+      spinCtx.fillStyle = SPIN_COLORS[i % SPIN_COLORS.length];
+      spinCtx.fill();
+      spinCtx.save();
+      spinCtx.translate(cx,cy);
+      spinCtx.rotate(start + slice/2);
+      spinCtx.textAlign = 'right';
+      spinCtx.fillStyle = '#fff';
+      spinCtx.font = '13px Inter, sans-serif';
+      spinCtx.fillText(label.slice(0,14), r - 12, 4);
+      spinCtx.restore();
+    });
+  }
+  document.getElementById('spinInput').addEventListener('input', drawWheel);
+  drawWheel();
+
+  document.getElementById('spinBtn').addEventListener('click', () => {
+    if (spinning || spinOptions.length === 0) return;
+    spinning = true;
+    const n = spinOptions.length;
+    const sliceDeg = 360 / n;
+    const winnerIndex = Math.floor(Math.random() * n);
+    const centerAngle = winnerIndex * sliceDeg + sliceDeg/2;
+    const extraSpins = 5 * 360;
+    const target = extraSpins + (360 - centerAngle);
+    currentRotation += target;
+    spinCanvas.style.transform = `rotate(${currentRotation}deg)`;
+    document.getElementById('spinOut').textContent = 'Spinning…';
+    setTimeout(() => {
+      document.getElementById('spinOut').textContent = `🎉 ${spinOptions[winnerIndex]}`;
+      spinning = false;
+    }, 4100);
+  });
+
+  // ---- Time Zone Converter ----
+  const TZ_LIST = [
+    { label: 'India (IST)', zone: 'Asia/Kolkata' },
+    { label: 'New York (EST/EDT)', zone: 'America/New_York' },
+    { label: 'London (GMT/BST)', zone: 'Europe/London' },
+    { label: 'Dubai (GST)', zone: 'Asia/Dubai' },
+    { label: 'Singapore (SGT)', zone: 'Asia/Singapore' },
+    { label: 'Sydney (AEST/AEDT)', zone: 'Australia/Sydney' },
+    { label: 'Tokyo (JST)', zone: 'Asia/Tokyo' },
+    { label: 'Los Angeles (PST/PDT)', zone: 'America/Los_Angeles' }
+  ];
+  function renderTZ(){
+    const val = document.getElementById('tzInput').value;
+    const d = val ? new Date(val) : new Date();
+    const grid = document.getElementById('tzGrid');
+    grid.innerHTML = '';
+    TZ_LIST.forEach(tz => {
+      const formatted = d.toLocaleString('en-IN', {
+        timeZone: tz.zone, weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit', hour12:true
+      });
+      const tile = document.createElement('div');
+      tile.className = 'board-tile';
+      tile.innerHTML = `<div class="label">${tz.label}</div><div class="value mono" style="font-size:16px;">${formatted}</div>`;
+      grid.appendChild(tile);
+    });
+  }
+  const nowForTZ = new Date();
+  nowForTZ.setMinutes(nowForTZ.getMinutes() - nowForTZ.getTimezoneOffset());
+  document.getElementById('tzInput').value = nowForTZ.toISOString().slice(0,16);
+  document.getElementById('tzInput').addEventListener('input', renderTZ);
+  renderTZ();
 </script>
 </body>
 </html>
