@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+  <div class="navlinks" id="navLinks">
+    <a href="/home">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/fun">Fun</a>
+    <a href="/todo" class="current">To-Do</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Daily Tasks</div>
+      <h2>To-Do List</h2>
+      <p>Add tasks, check them off, remove when done.</p>
+    </div>
+
+    <div class="calc-card">
+      <div class="field-row">
+        <div class="field" style="grid-column:1/-1;">
+          <label for="todoInput">Add a task</label>
+          <div style="display:flex; gap:10px;">
+            <input type="text" id="todoInput" placeholder="e.g. Pay electricity bill" style="flex:1;">
+            <button id="todoAddBtn" class="calc-tab" aria-selected="true" style="cursor:pointer; white-space:nowrap;">Add</button>
+          </div>
+        </div>
+      </div>
+      <div id="todoList" style="display:flex; flex-direction:column; gap:8px;"></div>
+      <div class="rate-caption" style="margin-top:14px;">Saved only in this browser on this device — not synced anywhere else.</div>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- To-Do List (this browser only) ----
+  const TODO_KEY = 'dailyboard_todos';
+  function getTodos(){ try { return JSON.parse(localStorage.getItem(TODO_KEY)) || []; } catch(e){ return []; } }
+  function saveTodos(list){ localStorage.setItem(TODO_KEY, JSON.stringify(list)); }
+  function renderTodos(){
+    const list = getTodos();
+    const wrap = document.getElementById('todoList');
+    wrap.innerHTML = '';
+    if (list.length === 0) {
+      wrap.innerHTML = '<p style="font-size:13px; color:var(--ink); opacity:0.5;">No tasks yet — add one above.</p>';
+      return;
+    }
+    list.forEach((task, i) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--paper-dim); border-radius:9px;';
+      row.innerHTML = `
+        <input type="checkbox" ${task.done ? 'checked' : ''} data-idx="${i}" class="todo-check" style="width:18px; height:18px;">
+        <span style="flex:1; font-size:14px; ${task.done ? 'text-decoration:line-through; opacity:.5;' : ''}">${task.text}</span>
+        <a href="#" data-idx="${i}" class="todo-del" style="color:#b3401f; font-size:13px; font-weight:600; text-decoration:none;">Remove</a>`;
+      wrap.appendChild(row);
+    });
+    wrap.querySelectorAll('.todo-check').forEach(cb => cb.addEventListener('change', () => {
+      const list = getTodos();
+      list[+cb.dataset.idx].done = cb.checked;
+      saveTodos(list);
+      renderTodos();
+    }));
+    wrap.querySelectorAll('.todo-del').forEach(a => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const list = getTodos();
+      list.splice(+a.dataset.idx, 1);
+      saveTodos(list);
+      renderTodos();
+    }));
+  }
+  function addTodo(){
+    const input = document.getElementById('todoInput');
+    const text = input.value.trim();
+    if (!text) return;
+    const list = getTodos();
+    list.push({ text, done: false });
+    saveTodos(list);
+    input.value = '';
+    renderTodos();
+  }
+  document.getElementById('todoAddBtn').addEventListener('click', addTodo);
+  document.getElementById('todoInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') addTodo(); });
+  renderTodos();
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>

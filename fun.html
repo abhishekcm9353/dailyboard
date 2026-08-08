@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun — Spin Wheel | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+  <div class="navlinks" id="navLinks">
+    <a href="/home">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/fun" class="current">Fun</a>
+    <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Fun</div>
+      <h2>Spin the Wheel</h2>
+      <p>Type your options, spin, and let it decide for you.</p>
+    </div>
+
+    <div class="calc-card">
+      <div class="field-row">
+        <div class="field" style="grid-column:1/-1;">
+          <label for="spinInput">Options (comma separated)</label>
+          <input type="text" id="spinInput" value="Pizza, Burger, Sushi, Tacos, Biryani, Pasta">
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:16px; padding:10px 0;">
+        <div style="position:relative;">
+          <canvas id="spinCanvas" width="280" height="280" style="transition:transform 4s cubic-bezier(0.17,0.67,0.12,0.99);"></canvas>
+          <div style="position:absolute; top:-4px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:12px solid transparent; border-right:12px solid transparent; border-top:20px solid var(--turmeric-dim);"></div>
+        </div>
+        <button id="spinBtn" class="calc-tab" aria-selected="true" style="cursor:pointer; padding:11px 28px;">Spin the Wheel</button>
+        <div class="calc-result" style="width:100%; text-align:center;">
+          <div class="big" id="spinOut">Add options and spin!</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- Spin Wheel (fixed: segments now drawn starting from top, matching the pointer) ----
+  const spinCanvas = document.getElementById('spinCanvas');
+  const spinCtx = spinCanvas.getContext('2d');
+  const SPIN_COLORS = ['#1B2A4A','#E8A33D','#2F5233','#C98A2C','#28395E','#3FAE5A','#E0554C','#7A5AA3'];
+  let spinOptions = [];
+  let currentRotation = 0;
+  let spinning = false;
+
+  function drawWheel(){
+    spinOptions = document.getElementById('spinInput').value.split(',').map(s => s.trim()).filter(Boolean);
+    if (spinOptions.length === 0) spinOptions = ['Option 1', 'Option 2'];
+    const n = spinOptions.length;
+    const r = 140, cx = 140, cy = 140;
+    spinCtx.clearRect(0,0,280,280);
+    const slice = (2*Math.PI) / n;
+    const offset = -Math.PI/2; // segment 0 starts at the top, aligned with the pointer
+    spinOptions.forEach((label, i) => {
+      const start = offset + i * slice, end = start + slice;
+      spinCtx.beginPath();
+      spinCtx.moveTo(cx,cy);
+      spinCtx.arc(cx,cy,r,start,end);
+      spinCtx.closePath();
+      spinCtx.fillStyle = SPIN_COLORS[i % SPIN_COLORS.length];
+      spinCtx.fill();
+      spinCtx.save();
+      spinCtx.translate(cx,cy);
+      spinCtx.rotate(start + slice/2);
+      spinCtx.textAlign = 'right';
+      spinCtx.fillStyle = '#fff';
+      spinCtx.font = '13px Inter, sans-serif';
+      spinCtx.fillText(label.slice(0,14), r - 12, 4);
+      spinCtx.restore();
+    });
+  }
+  document.getElementById('spinInput').addEventListener('input', drawWheel);
+  drawWheel();
+
+  document.getElementById('spinBtn').addEventListener('click', () => {
+    if (spinning || spinOptions.length === 0) return;
+    spinning = true;
+    const n = spinOptions.length;
+    const sliceDeg = 360 / n;
+    const winnerIndex = Math.floor(Math.random() * n);
+    const centerAngle = winnerIndex * sliceDeg + sliceDeg/2;
+    const extraSpins = 5 * 360;
+    const target = extraSpins + (360 - centerAngle);
+    currentRotation += target;
+    spinCanvas.style.transform = `rotate(${currentRotation}deg)`;
+    document.getElementById('spinOut').textContent = 'Spinning…';
+    setTimeout(() => {
+      document.getElementById('spinOut').textContent = `🎉 ${spinOptions[winnerIndex]}`;
+      spinning = false;
+    }, 4100);
+  });
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>

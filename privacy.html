@@ -14,15 +14,17 @@
 <a href="#main" class="skip-link">Skip to content</a>
 
 <nav>
-  <a href="index.html" class="brand">Daily<span>Board</span></a>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
   <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
   <div class="navlinks" id="navLinks">
-    <a href="index.html">Home</a>
-    <a href="weather.html">Weather</a>
-    <a href="rates.html">Rates</a>
-    <a href="calculator.html">Calculators</a>
-    <a href="about.html">About</a>
+    <a href="/home">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/fun">Fun</a>
+    <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
   </div>
 </nav>
 
@@ -45,14 +47,14 @@
 
       <p><strong>Your choices.</strong> You can disable location access anytime in your browser settings. You can also block cookies via your browser settings, though this may affect ad personalization.</p>
 
-      <p><strong>Contact.</strong> Questions about this policy can be sent via the <a href="contact.html">Contact page</a>.</p>
+      <p><strong>Contact.</strong> Questions about this policy can be sent via the <a href="/contact">Contact page</a>.</p>
 
       <p><strong>Changes.</strong> This policy may be updated from time to time. Continued use of the site after changes means you accept the updated policy.</p>
     </div>
   </section>
 </main>
 
-<footer>© <span id="year"></span> DailyBoard · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></footer>
+<footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a></footer>
 
 <script>
   const navToggle = document.getElementById('navToggle');
@@ -73,5 +75,6 @@
   document.getElementById('year').textContent = new Date().getFullYear();
   document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-IN', { year:'numeric', month:'long', day:'numeric' });
 </script>
+<script src="chatbot.js"></script>
 </body>
 </html>

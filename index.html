@@ -6,14 +6,15 @@
 <title>DailyBoard | Home</title>
 <meta name="description" content="Live rates and quick calculators, all in one place.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 <div id="introScreen" style="position:fixed; inset:0; background:var(--indigo); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity .6s ease;">
-  <div style="font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(38px,9vw,84px); color:var(--chalk); letter-spacing:1px; display:flex;">
+  <div style="font-family:'Orbitron',sans-serif; font-weight:900; font-size:clamp(46px,13vw,120px); color:var(--chalk); letter-spacing:3px; display:flex; text-shadow:0 0 24px rgba(232,163,61,0.35);">
     <span id="introText"></span><span id="introCursor" style="display:inline-block; width:0.06em; margin-left:4px; background:var(--turmeric); animation:introBlink 0.8s step-end infinite;">&nbsp;</span>
   </div>
 </div>
@@ -22,15 +23,17 @@
 <a href="#main" class="skip-link">Skip to content</a>
 
 <nav>
-  <a href="index.html" class="brand">Daily<span>Board</span></a>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
   <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
   <div class="navlinks" id="navLinks">
-    <a href="index.html" class="current">Home</a>
-    <a href="weather.html">Weather</a>
-    <a href="rates.html">Rates</a>
-    <a href="calculator.html">Calculators</a>
-    <a href="about.html">About</a>
+    <a href="/home" class="current">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/fun">Fun</a>
+    <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
   </div>
 </nav>
 
@@ -56,21 +59,23 @@
           <option value="Compound Interest">
           <option value="Tax Calculator">
           <option value="Percentage Calculator">
+          <option value="SIP Calculator">
+          <option value="GST Calculator">
+          <option value="Discount Calculator">
+          <option value="Word Count">
           <option value="Weather">
           <option value="Gold Rate">
           <option value="Silver Rate">
           <option value="Platinum Rate">
+          <option value="Spin Wheel">
+          <option value="To-Do List">
         </datalist>
       </div>
-
-      <div class="board-grid" style="margin-top:20px;">
-        <div class="board-tile">
-          <div class="label">Next Holiday</div>
-          <div class="value mono" id="holidayName">—</div>
-          <div class="sub" id="holidayCountdown">&nbsp;</div>
-        </div>
-      </div>
     </div>
+  </div>
+
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marqueeTrack"></div>
   </div>
 
   <section>
@@ -80,25 +85,37 @@
       <p>Pick a section below to get started.</p>
     </div>
     <div class="card-grid">
-      <a class="nav-card" href="weather.html">
+      <a class="nav-card" href="/weather">
         <div class="emoji">🌤️</div>
         <h3>Weather</h3>
         <p>Live temperature, conditions, and a 3-day forecast for your location.</p>
         <span class="goto">Check weather →</span>
       </a>
-      <a class="nav-card" href="rates.html">
+      <a class="nav-card" href="/rates">
         <div class="emoji">📋</div>
         <h3>Rates</h3>
         <p>Live gold, silver, and platinum rates, updated automatically.</p>
         <span class="goto">View rates →</span>
       </a>
-      <a class="nav-card" href="calculator.html">
+      <a class="nav-card" href="/calculator">
         <div class="emoji">🧮</div>
         <h3>Calculators</h3>
-        <p>10+ calculators plus a to-do list — EMI, SIP, GST, tax, and more.</p>
+        <p>14 calculators — EMI, SIP, GST, tax, BMI, and more.</p>
         <span class="goto">Open tools →</span>
       </a>
-      <a class="nav-card" href="about.html">
+      <a class="nav-card" href="/fun">
+        <div class="emoji">🎡</div>
+        <h3>Fun</h3>
+        <p>Spin the wheel to make quick, fun decisions.</p>
+        <span class="goto">Spin now →</span>
+      </a>
+      <a class="nav-card" href="/todo">
+        <div class="emoji">✅</div>
+        <h3>To-Do List</h3>
+        <p>Track your daily tasks — saved right in your browser.</p>
+        <span class="goto">Open list →</span>
+      </a>
+      <a class="nav-card" href="/about">
         <div class="emoji">👤</div>
         <h3>About</h3>
         <p>Background, skills, and how to get in touch.</p>
@@ -106,9 +123,55 @@
       </a>
     </div>
   </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Upcoming</div>
+      <h2>Holidays &amp; Festivals</h2>
+      <p>All upcoming Indian public holidays and major festivals — this list updates itself as dates pass.</p>
+    </div>
+    <div class="festival-grid" id="festivalGrid"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Tools</div>
+      <h2>QR Code Generator</h2>
+      <p>Turn any text or link into a scannable QR code.</p>
+    </div>
+    <div class="calc-card">
+      <div class="field-row">
+        <div class="field" style="grid-column:1/-1;">
+          <label for="qrInput">Text or URL</label>
+          <input type="text" id="qrInput" placeholder="https://example.com" value="https://dailyboard-acm.vercel.app">
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:14px; padding:20px 0;">
+        <div id="qrBox" style="background:#fff; padding:16px; border-radius:12px;"></div>
+        <button id="qrDownload" class="calc-tab" aria-selected="true" style="cursor:pointer;">Download PNG</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Tools</div>
+      <h2>Time Zone Converter</h2>
+      <p>Pick a date &amp; time and see it across major world time zones.</p>
+    </div>
+    <div class="calc-card">
+      <div class="field-row">
+        <div class="field" style="grid-column:1/-1;">
+          <label for="tzInput">Date &amp; Time (your local time)</label>
+          <input type="datetime-local" id="tzInput">
+        </div>
+      </div>
+      <div class="board-grid light-tiles" id="tzGrid"></div>
+    </div>
+  </section>
 </main>
 
-<footer>© <span id="year"></span> DailyBoard · <a href="privacy.html">Privacy Policy</a> · <a href="contact.html">Contact</a></footer>
+<footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a></footer>
 
 <script>
   const navToggle = document.getElementById('navToggle');
@@ -126,7 +189,7 @@
     else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
     applyThemeIcon();
   });
-  // ---- Intro typing animation ----
+
   (function(){
     const text = 'DailyBoard';
     const introText = document.getElementById('introText');
@@ -153,15 +216,17 @@
 
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ---- Tool search: jump straight to the right page ----
   const TOOL_MAP = {
-    'emi calculator': 'calculator.html', 'cgpa to percentage': 'calculator.html',
-    'age calculator': 'calculator.html', 'experience calculator': 'calculator.html',
-    'currency converter': 'calculator.html', 'unit converter': 'calculator.html',
-    'bmi calculator': 'calculator.html', 'simple interest': 'calculator.html',
-    'compound interest': 'calculator.html', 'tax calculator': 'calculator.html',
-    'percentage calculator': 'calculator.html', 'weather': 'weather.html',
-    'gold rate': 'rates.html', 'silver rate': 'rates.html', 'platinum rate': 'rates.html'
+    'emi calculator': '/calculator', 'cgpa to percentage': '/calculator',
+    'age calculator': '/calculator', 'experience calculator': '/calculator',
+    'currency converter': '/calculator', 'unit converter': '/calculator',
+    'bmi calculator': '/calculator', 'simple interest': '/calculator',
+    'compound interest': '/calculator', 'tax calculator': '/calculator',
+    'percentage calculator': '/calculator', 'sip calculator': '/calculator',
+    'gst calculator': '/calculator', 'discount calculator': '/calculator',
+    'word count': '/calculator',
+    'weather': '/weather', 'gold rate': '/rates', 'silver rate': '/rates',
+    'platinum rate': '/rates', 'spin wheel': '/fun', 'to-do list': '/todo'
   };
   const toolSearch = document.getElementById('toolSearch');
   function jumpToTool(){
@@ -171,27 +236,168 @@
   toolSearch.addEventListener('change', jumpToTool);
   toolSearch.addEventListener('keydown', (e) => { if (e.key === 'Enter') jumpToTool(); });
 
-  // ---- Next Holiday Countdown (static list, no API needed) ----
-  const HOLIDAYS_2026 = [
-    { name: 'Independence Day', date: '2026-08-15' },
-    { name: 'Ganesh Chaturthi', date: '2026-09-14' },
-    { name: 'Gandhi Jayanti', date: '2026-10-02' },
-    { name: 'Dussehra', date: '2026-10-20' },
-    { name: 'Diwali', date: '2026-11-08' },
-    { name: 'Christmas', date: '2026-12-25' },
-    { name: "New Year's Day", date: '2027-01-01' },
-    { name: 'Republic Day', date: '2027-01-26' }
+  const HOLIDAYS_FESTIVALS = [
+    { name: 'Independence Day', date: '2026-08-15', icon: '🇮🇳', tag: 'National Holiday' },
+    { name: 'Gandhi Jayanti', date: '2026-10-02', icon: '🕊️', tag: 'National Holiday' },
+    { name: 'Dussehra', date: '2026-10-20', icon: '🏹', tag: 'Festival' },
+    { name: 'Diwali', date: '2026-11-08', icon: '🪔', tag: 'Festival' },
+    { name: 'Govardhan Puja', date: '2026-11-09', icon: '🙏', tag: 'Festival' },
+    { name: 'Bhai Dooj', date: '2026-11-11', icon: '💐', tag: 'Festival' },
+    { name: "Guru Nanak Jayanti", date: '2026-11-24', icon: '📿', tag: 'Festival' },
+    { name: 'Gita Jayanti', date: '2026-12-14', icon: '📖', tag: 'Festival' },
+    { name: 'Christmas', date: '2026-12-25', icon: '🎄', tag: 'Festival' },
+    { name: "New Year's Eve", date: '2026-12-31', icon: '🎉', tag: 'Observance' },
+    { name: "New Year's Day", date: '2027-01-01', icon: '🎆', tag: 'Observance' },
+    { name: 'Lohri', date: '2027-01-13', icon: '🔥', tag: 'Festival' },
+    { name: 'Makar Sankranti / Pongal', date: '2027-01-14', icon: '🌾', tag: 'Festival' },
+    { name: 'Vasant Panchami', date: '2027-01-23', icon: '🌼', tag: 'Festival' },
+    { name: 'Republic Day', date: '2027-01-26', icon: '🇮🇳', tag: 'National Holiday' }
   ];
-  const today = new Date(); today.setHours(0,0,0,0);
-  const upcoming = HOLIDAYS_2026
-    .map(h => ({ ...h, diff: Math.ceil((new Date(h.date) - today) / 86400000) }))
-    .filter(h => h.diff >= 0)
-    .sort((a,b) => a.diff - b.diff)[0];
-  if (upcoming) {
-    document.getElementById('holidayName').textContent = upcoming.name;
-    document.getElementById('holidayCountdown').textContent =
-      upcoming.diff === 0 ? "It's today!" : `In ${upcoming.diff} day${upcoming.diff===1?'':'s'} · ${new Date(upcoming.date).toLocaleDateString('en-IN',{day:'numeric',month:'long'})}`;
+  function renderFestivals(){
+    const today = new Date(); today.setHours(0,0,0,0);
+    const upcoming = HOLIDAYS_FESTIVALS
+      .map(h => ({ ...h, diff: Math.ceil((new Date(h.date) - today) / 86400000) }))
+      .filter(h => h.diff >= 0)
+      .sort((a,b) => a.diff - b.diff)
+      .slice(0, 8);
+    const grid = document.getElementById('festivalGrid');
+    grid.innerHTML = '';
+    upcoming.forEach(h => {
+      const card = document.createElement('div');
+      card.className = 'festival-card';
+      const dateLabel = new Date(h.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+      const countdown = h.diff === 0 ? "Today!" : `In ${h.diff} day${h.diff===1?'':'s'}`;
+      card.innerHTML = `
+        <div class="festival-icon">${h.icon}</div>
+        <h4>${h.name}</h4>
+        <div class="fdate">${dateLabel} · ${h.tag}</div>
+        <div class="fcountdown">${countdown}</div>`;
+      grid.appendChild(card);
+    });
   }
+  renderFestivals();
+
+  const TROY_OUNCE_GRAMS = 31.1034768;
+  const TICKER_CACHE_KEY = 'dailyboard_metals_cache_v2';
+  const TICKER_CACHE_MS = 30 * 60 * 1000;
+
+  async function fetchMetalUSD(symbol){
+    const res = await fetch(`https://api.gold-api.com/price/${symbol}`);
+    if (!res.ok) throw new Error('metal fetch failed');
+    const data = await res.json();
+    return data.price;
+  }
+  async function fetchUsdToInr(){
+    const res = await fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=INR');
+    if (!res.ok) throw new Error('fx fetch failed');
+    const data = await res.json();
+    return data.rates.INR;
+  }
+
+  async function loadTickerMetals(){
+    let goldUSD, silverUSD, platinumUSD, usdInr;
+    try {
+      const cached = JSON.parse(localStorage.getItem(TICKER_CACHE_KEY) || 'null');
+      if (cached && (Date.now() - cached.ts) < TICKER_CACHE_MS) {
+        ({ gold: goldUSD, silver: silverUSD, platinum: platinumUSD, usdInr } = cached);
+      } else {
+        [goldUSD, silverUSD, platinumUSD, usdInr] = await Promise.all([
+          fetchMetalUSD('XAU'), fetchMetalUSD('XAG'), fetchMetalUSD('XPT'), fetchUsdToInr()
+        ]);
+        localStorage.setItem(TICKER_CACHE_KEY, JSON.stringify({ gold: goldUSD, silver: silverUSD, platinum: platinumUSD, usdInr, ts: Date.now() }));
+      }
+    } catch(e) { return null; }
+    const MULT = 1.11;
+    const gold22 = (goldUSD / TROY_OUNCE_GRAMS) * usdInr * MULT * 0.916;
+    const silverKg = (silverUSD / TROY_OUNCE_GRAMS) * usdInr * MULT * 1000;
+    const platinumGm = (platinumUSD / TROY_OUNCE_GRAMS) * usdInr * MULT;
+    return { gold22, silverKg, platinumGm };
+  }
+
+  function buildMarquee(weatherText, metals){
+    const items = [];
+    items.push(`<a class="marquee-item" href="/weather"><span>🌤️</span><span class="m-label">Weather</span><span class="m-val">${weatherText}</span></a>`);
+    if (metals) {
+      items.push(`<a class="marquee-item" href="/rates"><span>🥇</span><span class="m-label">22K Gold</span><span class="m-val">₹${Math.round(metals.gold22).toLocaleString('en-IN')}/gm</span></a>`);
+      items.push(`<a class="marquee-item" href="/rates"><span>🥈</span><span class="m-label">Silver</span><span class="m-val">₹${Math.round(metals.silverKg).toLocaleString('en-IN')}/kg</span></a>`);
+      items.push(`<a class="marquee-item" href="/rates"><span>⚪</span><span class="m-label">Platinum</span><span class="m-val">₹${Math.round(metals.platinumGm).toLocaleString('en-IN')}/gm</span></a>`);
+    } else {
+      items.push(`<a class="marquee-item" href="/rates"><span class="m-label">Rates</span><span class="m-val">Tap to view live rates →</span></a>`);
+    }
+    const html = items.join('');
+    document.getElementById('marqueeTrack').innerHTML = html + html;
+  }
+
+  function loadWeatherForTicker(lat, lon){
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`)
+      .then(r => r.json())
+      .then(async d => {
+        const weatherText = `${d.current.temperature_2m}°C`;
+        const metals = await loadTickerMetals();
+        buildMarquee(weatherText, metals);
+      })
+      .catch(async () => {
+        const metals = await loadTickerMetals();
+        buildMarquee('—', metals);
+      });
+  }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => loadWeatherForTicker(pos.coords.latitude, pos.coords.longitude),
+      () => loadWeatherForTicker(12.9716, 77.5946)
+    );
+  } else {
+    loadWeatherForTicker(12.9716, 77.5946);
+  }
+
+  function renderQR(){
+    const text = document.getElementById('qrInput').value.trim() || 'https://example.com';
+    const box = document.getElementById('qrBox');
+    box.innerHTML = '';
+    new QRCode(box, { text, width: 200, height: 200, colorDark: '#1B2A4A', colorLight: '#ffffff' });
+  }
+  document.getElementById('qrInput').addEventListener('input', renderQR);
+  document.getElementById('qrDownload').addEventListener('click', () => {
+    const img = document.querySelector('#qrBox img') || document.querySelector('#qrBox canvas');
+    if (!img) return;
+    const link = document.createElement('a');
+    link.download = 'qrcode.png';
+    link.href = img.tagName === 'CANVAS' ? img.toDataURL('image/png') : img.src;
+    link.click();
+  });
+  renderQR();
+
+  const TZ_LIST = [
+    { label: 'India (IST)', zone: 'Asia/Kolkata' },
+    { label: 'New York (EST/EDT)', zone: 'America/New_York' },
+    { label: 'London (GMT/BST)', zone: 'Europe/London' },
+    { label: 'Dubai (GST)', zone: 'Asia/Dubai' },
+    { label: 'Singapore (SGT)', zone: 'Asia/Singapore' },
+    { label: 'Sydney (AEST/AEDT)', zone: 'Australia/Sydney' },
+    { label: 'Tokyo (JST)', zone: 'Asia/Tokyo' },
+    { label: 'Los Angeles (PST/PDT)', zone: 'America/Los_Angeles' }
+  ];
+  function renderTZ(){
+    const val = document.getElementById('tzInput').value;
+    const d = val ? new Date(val) : new Date();
+    const grid = document.getElementById('tzGrid');
+    grid.innerHTML = '';
+    TZ_LIST.forEach(tz => {
+      const formatted = d.toLocaleString('en-IN', {
+        timeZone: tz.zone, weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit', hour12:true
+      });
+      const tile = document.createElement('div');
+      tile.className = 'board-tile';
+      tile.innerHTML = `<div class="label">${tz.label}</div><div class="value mono" style="font-size:16px;">${formatted}</div>`;
+      grid.appendChild(tile);
+    });
+  }
+  const nowForTZ = new Date();
+  nowForTZ.setMinutes(nowForTZ.getMinutes() - nowForTZ.getTimezoneOffset());
+  document.getElementById('tzInput').value = nowForTZ.toISOString().slice(0,16);
+  document.getElementById('tzInput').addEventListener('input', renderTZ);
+  renderTZ();
 </script>
+<script src="chatbot.js"></script>
 </body>
 </html>
