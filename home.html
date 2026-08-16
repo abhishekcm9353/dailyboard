@@ -24,8 +24,8 @@
 
 <nav>
   <a href="/home" class="brand">Daily<span>Board</span></a>
-  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
   <div class="navlinks" id="navLinks">
     <a href="/home" class="current">Home</a>
     <a href="/weather">Weather</a>
@@ -86,37 +86,37 @@
     </div>
     <div class="card-grid">
       <a class="nav-card" href="/weather">
-        <div class="emoji">🌤️</div>
+        <div class="icon3d icon3d-weather"><i data-lucide="cloud-sun"></i></div>
         <h3>Weather</h3>
         <p>Live temperature, conditions, and a 3-day forecast for your location.</p>
         <span class="goto">Check weather →</span>
       </a>
       <a class="nav-card" href="/rates">
-        <div class="emoji">📋</div>
+        <div class="icon3d icon3d-rates"><i data-lucide="line-chart"></i></div>
         <h3>Rates</h3>
         <p>Live gold, silver, and platinum rates, updated automatically.</p>
         <span class="goto">View rates →</span>
       </a>
       <a class="nav-card" href="/calculator">
-        <div class="emoji">🧮</div>
+        <div class="icon3d icon3d-calc"><i data-lucide="calculator"></i></div>
         <h3>Calculators</h3>
         <p>14 calculators — EMI, SIP, GST, tax, BMI, and more.</p>
         <span class="goto">Open tools →</span>
       </a>
       <a class="nav-card" href="/fun">
-        <div class="emoji">🎡</div>
+        <div class="icon3d icon3d-fun"><i data-lucide="dices"></i></div>
         <h3>Fun</h3>
         <p>Spin the wheel to make quick, fun decisions.</p>
         <span class="goto">Spin now →</span>
       </a>
       <a class="nav-card" href="/todo">
-        <div class="emoji">✅</div>
+        <div class="icon3d icon3d-todo"><i data-lucide="list-checks"></i></div>
         <h3>To-Do List</h3>
         <p>Track your daily tasks — saved right in your browser.</p>
         <span class="goto">Open list →</span>
       </a>
       <a class="nav-card" href="/about">
-        <div class="emoji">👤</div>
+        <div class="icon3d icon3d-about"><i data-lucide="user"></i></div>
         <h3>About</h3>
         <p>Background, skills, and how to get in touch.</p>
         <span class="goto">Learn more →</span>
@@ -181,7 +181,7 @@
     navToggle.setAttribute('aria-expanded', open);
   });
   const themeToggle = document.getElementById('themeToggle');
-  function applyThemeIcon(){ themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  function applyThemeIcon(){ themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>'; if (window.lucide) lucide.createIcons(); }
   applyThemeIcon();
   themeToggle.addEventListener('click', () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -237,21 +237,21 @@
   toolSearch.addEventListener('keydown', (e) => { if (e.key === 'Enter') jumpToTool(); });
 
   const HOLIDAYS_FESTIVALS = [
-    { name: 'Independence Day', date: '2026-08-15', icon: '🇮🇳', tag: 'National Holiday' },
-    { name: 'Gandhi Jayanti', date: '2026-10-02', icon: '🕊️', tag: 'National Holiday' },
-    { name: 'Dussehra', date: '2026-10-20', icon: '🏹', tag: 'Festival' },
-    { name: 'Diwali', date: '2026-11-08', icon: '🪔', tag: 'Festival' },
-    { name: 'Govardhan Puja', date: '2026-11-09', icon: '🙏', tag: 'Festival' },
-    { name: 'Bhai Dooj', date: '2026-11-11', icon: '💐', tag: 'Festival' },
-    { name: "Guru Nanak Jayanti", date: '2026-11-24', icon: '📿', tag: 'Festival' },
-    { name: 'Gita Jayanti', date: '2026-12-14', icon: '📖', tag: 'Festival' },
-    { name: 'Christmas', date: '2026-12-25', icon: '🎄', tag: 'Festival' },
-    { name: "New Year's Eve", date: '2026-12-31', icon: '🎉', tag: 'Observance' },
-    { name: "New Year's Day", date: '2027-01-01', icon: '🎆', tag: 'Observance' },
-    { name: 'Lohri', date: '2027-01-13', icon: '🔥', tag: 'Festival' },
-    { name: 'Makar Sankranti / Pongal', date: '2027-01-14', icon: '🌾', tag: 'Festival' },
-    { name: 'Vasant Panchami', date: '2027-01-23', icon: '🌼', tag: 'Festival' },
-    { name: 'Republic Day', date: '2027-01-26', icon: '🇮🇳', tag: 'National Holiday' }
+    { name: 'Independence Day', date: '2026-08-15', tag: 'National Holiday' },
+    { name: 'Gandhi Jayanti', date: '2026-10-02', tag: 'National Holiday' },
+    { name: 'Dussehra', date: '2026-10-20', tag: 'Festival' },
+    { name: 'Diwali', date: '2026-11-08', tag: 'Festival' },
+    { name: 'Govardhan Puja', date: '2026-11-09', tag: 'Festival' },
+    { name: 'Bhai Dooj', date: '2026-11-11', tag: 'Festival' },
+    { name: "Guru Nanak Jayanti", date: '2026-11-24', tag: 'Festival' },
+    { name: 'Gita Jayanti', date: '2026-12-14', tag: 'Festival' },
+    { name: 'Christmas', date: '2026-12-25', tag: 'Festival' },
+    { name: "New Year's Eve", date: '2026-12-31', tag: 'Observance' },
+    { name: "New Year's Day", date: '2027-01-01', tag: 'Observance' },
+    { name: 'Lohri', date: '2027-01-13', tag: 'Festival' },
+    { name: 'Makar Sankranti / Pongal', date: '2027-01-14', tag: 'Festival' },
+    { name: 'Vasant Panchami', date: '2027-01-23', tag: 'Festival' },
+    { name: 'Republic Day', date: '2027-01-26', tag: 'National Holiday' }
   ];
   function renderFestivals(){
     const today = new Date(); today.setHours(0,0,0,0);
@@ -267,13 +267,16 @@
       card.className = 'festival-card';
       const dateLabel = new Date(h.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
       const countdown = h.diff === 0 ? "Today!" : `In ${h.diff} day${h.diff===1?'':'s'}`;
+      const iconClass = h.tag === 'National Holiday' ? 'icon3d-national' : h.tag === 'Observance' ? 'icon3d-observance' : 'icon3d-festival';
+      const iconName = h.tag === 'National Holiday' ? 'flag' : h.tag === 'Observance' ? 'gift' : 'sparkles';
       card.innerHTML = `
-        <div class="festival-icon">${h.icon}</div>
+        <div class="icon3d ${iconClass}"><i data-lucide="${iconName}"></i></div>
         <h4>${h.name}</h4>
         <div class="fdate">${dateLabel} · ${h.tag}</div>
         <div class="fcountdown">${countdown}</div>`;
       grid.appendChild(card);
     });
+    if (window.lucide) lucide.createIcons();
   }
   renderFestivals();
 
@@ -316,16 +319,17 @@
 
   function buildMarquee(weatherText, metals){
     const items = [];
-    items.push(`<a class="marquee-item" href="/weather"><span>🌤️</span><span class="m-label">Weather</span><span class="m-val">${weatherText}</span></a>`);
+    items.push(`<a class="marquee-item" href="/weather"><i data-lucide="cloud-sun" style="width:16px;height:16px;"></i><span class="m-label">Weather</span><span class="m-val">${weatherText}</span></a>`);
     if (metals) {
-      items.push(`<a class="marquee-item" href="/rates"><span>🥇</span><span class="m-label">22K Gold</span><span class="m-val">₹${Math.round(metals.gold22).toLocaleString('en-IN')}/gm</span></a>`);
-      items.push(`<a class="marquee-item" href="/rates"><span>🥈</span><span class="m-label">Silver</span><span class="m-val">₹${Math.round(metals.silverKg).toLocaleString('en-IN')}/kg</span></a>`);
-      items.push(`<a class="marquee-item" href="/rates"><span>⚪</span><span class="m-label">Platinum</span><span class="m-val">₹${Math.round(metals.platinumGm).toLocaleString('en-IN')}/gm</span></a>`);
+      items.push(`<a class="marquee-item" href="/rates"><i data-lucide="coins" style="width:16px;height:16px;"></i><span class="m-label">22K Gold</span><span class="m-val">₹${Math.round(metals.gold22).toLocaleString('en-IN')}/gm</span></a>`);
+      items.push(`<a class="marquee-item" href="/rates"><i data-lucide="coins" style="width:16px;height:16px;"></i><span class="m-label">Silver</span><span class="m-val">₹${Math.round(metals.silverKg).toLocaleString('en-IN')}/kg</span></a>`);
+      items.push(`<a class="marquee-item" href="/rates"><i data-lucide="gem" style="width:16px;height:16px;"></i><span class="m-label">Platinum</span><span class="m-val">₹${Math.round(metals.platinumGm).toLocaleString('en-IN')}/gm</span></a>`);
     } else {
       items.push(`<a class="marquee-item" href="/rates"><span class="m-label">Rates</span><span class="m-val">Tap to view live rates →</span></a>`);
     }
     const html = items.join('');
     document.getElementById('marqueeTrack').innerHTML = html + html;
+    if (window.lucide) lucide.createIcons();
   }
 
   function loadWeatherForTicker(lat, lon){
@@ -398,6 +402,8 @@
   document.getElementById('tzInput').addEventListener('input', renderTZ);
   renderTZ();
 </script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide){ lucide.createIcons(); }</script>
 <script src="chatbot.js"></script>
 </body>
 </html>

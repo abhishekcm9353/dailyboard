@@ -15,8 +15,8 @@
 
 <nav>
   <a href="/home" class="brand">Daily<span>Board</span></a>
-  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false">☰</button>
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
   <div class="navlinks" id="navLinks">
     <a href="/home">Home</a>
     <a href="/weather">Weather</a>
@@ -69,6 +69,29 @@
     </div>
     <div class="rate-caption">Rates are international spot prices converted to INR with India's import duty (~6%) and GST (3%) factored in, similar to how Indian bullion rates are quoted — but they still exclude jeweller making charges and city-specific premiums, so treat as reference rates and confirm exact prices locally before any transaction.</div>
   </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Live Rates</div>
+      <h2>Crypto (INR)</h2>
+      <p id="cryptoDateLine">Loading live crypto prices…</p>
+    </div>
+    <div class="rate-table-wrap">
+      <table class="rate-table">
+        <thead>
+          <tr>
+            <th>Coin</th>
+            <th class="num">Price (INR)</th>
+            <th class="num">24h Change</th>
+          </tr>
+        </thead>
+        <tbody id="cryptoTableBody">
+          <tr><td colspan="3">Loading live rates…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rate-caption">Crypto prices are highly volatile and shown for reference only — not investment advice.</div>
+  </section>
 </main>
 
 <footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a></footer>
@@ -81,7 +104,7 @@
     navToggle.setAttribute('aria-expanded', open);
   });
   const themeToggle = document.getElementById('themeToggle');
-  function applyThemeIcon(){ themeToggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙'; }
+  function applyThemeIcon(){ themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>'; if (window.lucide) lucide.createIcons(); }
   applyThemeIcon();
   themeToggle.addEventListener('click', () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -192,7 +215,37 @@
   }
 
   loadMetals();
+
+  // ---- Crypto (CoinGecko, free, no key) ----
+  async function loadCrypto(){
+    try {
+      const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=inr&include_24hr_change=true');
+      if (!res.ok) throw new Error('crypto fetch failed');
+      const data = await res.json();
+      const now = new Date();
+      document.getElementById('cryptoDateLine').textContent =
+        `Live rates as of ${now.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}, ${now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`;
+
+      function cryptoRow(name, price, change){
+        const cls = change > 0 ? 'change-up' : change < 0 ? 'change-down' : 'change-flat';
+        const arrow = change > 0 ? '▲' : change < 0 ? '▼' : '▬';
+        return `<tr>
+          <td>${name}</td>
+          <td class="num">₹${Math.round(price).toLocaleString('en-IN')}</td>
+          <td class="num"><span class="${cls}">${arrow} ${Math.abs(change).toFixed(2)}%</span></td>
+        </tr>`;
+      }
+      document.getElementById('cryptoTableBody').innerHTML =
+        cryptoRow('Bitcoin (BTC)', data.bitcoin.inr, data.bitcoin.inr_24h_change) +
+        cryptoRow('Ethereum (ETH)', data.ethereum.inr, data.ethereum.inr_24h_change);
+    } catch(e) {
+      document.getElementById('cryptoTableBody').innerHTML = '<tr><td colspan="3">Live crypto feed unavailable right now — please refresh in a bit.</td></tr>';
+    }
+  }
+  loadCrypto();
 </script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide){ lucide.createIcons(); }</script>
 <script src="chatbot.js"></script>
 </body>
 </html>

@@ -1,9 +1,10 @@
 (function(){
   const FAQ = [
     { keys: ['gold'], reply: "Gold rates (24K/22K/18K) are live on the Rates page — per gram, per 8g, per 10g.", link: '/rates', linkText: 'Go to Rates →' },
+    { keys: ['crypto','bitcoin','ethereum','btc','eth'], reply: "Live Bitcoin and Ethereum prices in INR are on the Rates page.", link: '/rates', linkText: 'Go to Rates →' },
     { keys: ['silver'], reply: "Silver rate is live on the Rates page, with per gram and per kg pricing.", link: '/rates', linkText: 'Go to Rates →' },
     { keys: ['platinum'], reply: "Platinum rate is live on the Rates page too.", link: '/rates', linkText: 'Go to Rates →' },
-    { keys: ['weather','temperature','rain','forecast','humidity'], reply: "Live weather plus a 3-day forecast is on the Weather page.", link: '/weather', linkText: 'Go to Weather →' },
+    { keys: ['weather','temperature','rain','forecast','humidity','sunrise','sunset'], reply: "Live weather, sunrise/sunset times, plus a 3-day forecast is on the Weather page.", link: '/weather', linkText: 'Go to Weather →' },
     { keys: ['emi','loan'], reply: "Use the EMI tab on the Calculators page — enter loan amount, rate, and tenure.", link: '/calculator', linkText: 'Go to Calculators →' },
     { keys: ['cgpa','marks'], reply: "The CGPA → % tab converts your CGPA using the standard ×9.5 formula.", link: '/calculator', linkText: 'Go to Calculators →' },
     { keys: ['age'], reply: "The Age tab calculates your exact age from your date of birth.", link: '/calculator', linkText: 'Go to Calculators →' },
@@ -24,7 +25,7 @@
     { keys: ['contact','email','reach'], reply: "You can reach us anytime via the Contact page.", link: '/contact', linkText: 'Go to Contact →' },
     { keys: ['privacy'], reply: "Our full privacy policy is on the Privacy Policy page.", link: '/privacy', linkText: 'Go to Privacy →' },
     { keys: ['about','who made','who built'], reply: "Learn more about DailyBoard on the About page.", link: '/about', linkText: 'Go to About →' },
-    { keys: ['dark mode','theme','night mode'], reply: "Tap the 🌙 button on the right edge of the screen to toggle dark mode.", link: null },
+    { keys: ['dark mode','theme','night mode'], reply: "Tap the dark mode button on the right edge of the screen to toggle dark mode.", link: null },
     { keys: ['calculator','tool','tools'], reply: "There are 14 calculators on the Calculators page — EMI, GST, Tax, BMI, SIP, and more.", link: '/calculator', linkText: 'Go to Calculators →' },
     { keys: ['hi','hello','hey','namaste','hii','helo'], reply: "Hi! I'm the DailyBoard assistant. Ask me about gold rate, EMI, BMI, weather, or any tool here.", link: null }
   ];
@@ -41,20 +42,21 @@
     const btn = document.createElement('button');
     btn.id = 'chatbotBtn';
     btn.setAttribute('aria-label','Open chat assistant');
-    btn.textContent = '💬';
+    btn.innerHTML = '<i data-lucide="message-circle"></i>';
 
     const panel = document.createElement('div');
     panel.id = 'chatbotPanel';
     panel.innerHTML =
-      '<div id="chatbotHeader">DailyBoard Assistant<button id="chatbotClose" aria-label="Close">✕</button></div>' +
+      '<div id="chatbotHeader">DailyBoard Assistant<button id="chatbotClose" aria-label="Close"><i data-lucide="x"></i></button></div>' +
       '<div id="chatbotMessages"></div>' +
       '<div id="chatbotInputRow">' +
         '<input type="text" id="chatbotInput" placeholder="Ask about gold rate, EMI, BMI…">' +
-        '<button id="chatbotSend" aria-label="Send">➤</button>' +
+        '<button id="chatbotSend" aria-label="Send"><i data-lucide="send"></i></button>' +
       '</div>';
 
     document.body.appendChild(btn);
     document.body.appendChild(panel);
+    if (window.lucide) lucide.createIcons();
 
     function addMessage(text, sender, link, linkText){
       const messages = document.getElementById('chatbotMessages');
