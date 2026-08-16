@@ -49,7 +49,7 @@
 [data-theme="dark"] .light-tiles .board-tile .sub{ color:rgba(57,255,106,0.5); }
 [data-theme="dark"] .post p{ color:rgba(57,255,106,0.68); }
 [data-theme="dark"] .contact-card p{ color:rgba(57,255,106,0.85); }
-[data-theme="dark"] .cbtn{ color:#050807; }
+[data-theme="dark"] .contact-card .cbtn{ color:#050807; }
 [data-theme="dark"] .port-wrap p{ color:rgba(57,255,106,0.75); }
 [data-theme="dark"] .brand{ color:var(--turmeric); text-shadow:0 0 8px rgba(57,255,106,0.5); }
 [data-theme="dark"] .navtoggle{ color:var(--ink); }
