@@ -209,11 +209,13 @@ section{max-width:1040px; margin:0 auto; padding:64px 24px;}
 .calc-result .big{font-family:'IBM Plex Mono',monospace; font-size:26px; font-weight:600;}
 .calc-result .small{font-size:12px; opacity:.8; margin-top:4px;}
 
-.blog-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;}
+.blog-grid, .news-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;}
 .post{
   background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px;
-  display:flex; flex-direction:column; gap:10px;
+  display:flex; flex-direction:column; gap:10px; text-decoration:none;
+  transition:transform .2s ease, box-shadow .2s ease;
 }
+.news-item:hover{ transform:translateY(-3px); box-shadow:0 14px 26px -14px rgba(27,42,74,0.3); border-color:var(--turmeric); }
 .post .tag{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; color:var(--turmeric-dim); letter-spacing:.08em;}
 .post h3{font-size:18px; margin:0; color:var(--indigo);}
 .post p{font-size:14px; color:rgba(34,32,27,0.68); margin:0;}

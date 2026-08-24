@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
+  <div class="navlinks" id="navLinks">
+    <a href="/home">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/news" class="current">News</a>
+    <a href="/fun">Fun</a>
+    <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Live Headlines</div>
+      <h2>News</h2>
+      <p>Top stories, auto-updating — India, Tech, and Business.</p>
+    </div>
+
+    <div class="calc-layout">
+      <div class="calc-sidebar" role="tablist">
+        <button class="calc-tab" role="tab" aria-selected="true" data-target="india">India</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="tech">Tech</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="business">Business</button>
+      </div>
+      <div class="calc-content">
+
+        <div class="calc-panel active" id="panel-india">
+          <div id="newsIndia" class="news-grid"><div class="calc-card">Loading headlines…</div></div>
+        </div>
+        <div class="calc-panel" id="panel-tech">
+          <div id="newsTech" class="news-grid"><div class="calc-card">Loading headlines…</div></div>
+        </div>
+        <div class="calc-panel" id="panel-business">
+          <div id="newsBusiness" class="news-grid"><div class="calc-card">Loading headlines…</div></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="rate-caption" style="margin-top:20px;">Headlines are pulled live from Google News RSS feeds. Tap any headline to read the full story on the original publisher's site.</div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>'; if (window.lucide) lucide.createIcons(); }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const tabs = document.querySelectorAll('.calc-tab[data-target]');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.setAttribute('aria-selected','false'));
+      tab.setAttribute('aria-selected','true');
+      document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + tab.dataset.target).classList.add('active');
+    });
+  });
+
+  // ---- News (rss2json + Google News RSS) ----
+  const RSS2JSON_KEY = 'ulyeijlaeicnsddzkqwp6ppyxb4hdifrr6obnldw';
+  const NEWS_CACHE_MS = 20 * 60 * 1000; // refresh at most every 20 minutes per category
+
+  const FEEDS = {
+    india: 'https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en',
+    tech: 'https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-IN&gl=IN&ceid=IN:en',
+    business: 'https://news.google.com/rss/headlines/section/topic/BUSINESS?hl=en-IN&gl=IN&ceid=IN:en'
+  };
+
+  function stripHtml(html){
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html || '';
+    return (tmp.textContent || tmp.innerText || '').trim();
+  }
+
+  function timeAgo(dateStr){
+    const then = new Date(dateStr.replace(' ', 'T') + 'Z');
+    const diffMs = Date.now() - then.getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days}d ago`;
+  }
+
+  function renderNews(containerId, items){
+    const container = document.getElementById(containerId);
+    if (!items || items.length === 0) {
+      container.innerHTML = '<div class="calc-card">No headlines available right now.</div>';
+      return;
+    }
+    container.innerHTML = items.slice(0, 10).map(item => {
+      const snippet = stripHtml(item.description).slice(0, 140);
+      return `
+        <a class="post news-item" href="${item.link}" target="_blank" rel="noopener noreferrer">
+          <div class="tag">${timeAgo(item.pubDate)}</div>
+          <h3>${item.title}</h3>
+          <p>${snippet}${snippet.length === 140 ? '…' : ''}</p>
+        </a>`;
+    }).join('');
+  }
+
+  async function loadNews(category, containerId){
+    const cacheKey = `dailyboard_news_${category}`;
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
+      if (cached && (Date.now() - cached.ts) < NEWS_CACHE_MS) {
+        renderNews(containerId, cached.items);
+        return;
+      }
+    } catch(e) {}
+
+    try {
+      const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(FEEDS[category])}&api_key=${RSS2JSON_KEY}&count=10`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.status !== 'ok') throw new Error(data.message || 'feed error');
+      localStorage.setItem(cacheKey, JSON.stringify({ items: data.items, ts: Date.now() }));
+      renderNews(containerId, data.items);
+    } catch(e) {
+      document.getElementById(containerId).innerHTML = '<div class="calc-card">Live headlines unavailable right now — please refresh in a bit.</div>';
+    }
+  }
+
+  loadNews('india', 'newsIndia');
+  loadNews('tech', 'newsTech');
+  loadNews('business', 'newsBusiness');
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide){ lucide.createIcons(); }</script>
+<script src="chatbot.js"></script>
+</body>
+</html>

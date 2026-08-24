@@ -2,6 +2,7 @@
   const FAQ = [
     { keys: ['gold'], reply: "Gold rates (24K/22K/18K) are live on the Rates page — per gram, per 8g, per 10g.", link: '/rates', linkText: 'Go to Rates →' },
     { keys: ['crypto','bitcoin','ethereum','btc','eth'], reply: "Live Bitcoin and Ethereum prices in INR are on the Rates page.", link: '/rates', linkText: 'Go to Rates →' },
+    { keys: ['news','headlines'], reply: "Live news headlines — India, Tech, and Business — are on the News page.", link: '/news', linkText: 'Go to News →' },
     { keys: ['silver'], reply: "Silver rate is live on the Rates page, with per gram and per kg pricing.", link: '/rates', linkText: 'Go to Rates →' },
     { keys: ['platinum'], reply: "Platinum rate is live on the Rates page too.", link: '/rates', linkText: 'Go to Rates →' },
     { keys: ['weather','temperature','rain','forecast','humidity','sunrise','sunset'], reply: "Live weather, sunrise/sunset times, plus a 3-day forecast is on the Weather page.", link: '/weather', linkText: 'Go to Weather →' },
@@ -21,6 +22,7 @@
     { keys: ['discount','sale off'], reply: "The Discount tab shows the final price after a % discount.", link: '/calculator', linkText: 'Go to Calculators →' },
     { keys: ['word count','character count'], reply: "The Word Count tab counts words, characters, and sentences live.", link: '/calculator', linkText: 'Go to Calculators →' },
     { keys: ['spin','wheel','random pick'], reply: "The Spin Wheel is on the Fun page — enter options and spin!", link: '/fun', linkText: 'Go to Fun →' },
+    { keys: ['queens','tango','pinpoint','puzzle','game'], reply: "Queens, Tango, and Pinpoint puzzle games are on the Fun page.", link: '/fun', linkText: 'Go to Fun →' },
     { keys: ['time zone','timezone'], reply: "The Time Zone Converter on the Home page shows a chosen time across IST, EST, GMT, and more.", link: '/home', linkText: 'Go to Home →' },
     { keys: ['contact','email','reach'], reply: "You can reach us anytime via the Contact page.", link: '/contact', linkText: 'Go to Contact →' },
     { keys: ['privacy'], reply: "Our full privacy policy is on the Privacy Policy page.", link: '/privacy', linkText: 'Go to Privacy →' },
