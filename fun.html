@@ -34,7 +34,7 @@
     <div class="section-head">
       <div class="eyebrow">Fun</div>
       <h2>Games</h2>
-      <p>Spin the wheel, or try Queens, Tango, and Pinpoint puzzles.</p>
+      <p>Spin the wheel, try Queens, Tango, Pinpoint, or play a quick game.</p>
     </div>
 
     <div class="calc-layout">
@@ -43,6 +43,7 @@
         <button class="calc-tab" role="tab" aria-selected="false" data-target="queens">Queens</button>
         <button class="calc-tab" role="tab" aria-selected="false" data-target="tango">Tango</button>
         <button class="calc-tab" role="tab" aria-selected="false" data-target="pinpoint">Pinpoint</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="quick">Quick Games</button>
       </div>
       <div class="calc-content">
 
@@ -118,6 +119,50 @@
           </div>
         </div>
 
+        <div class="calc-panel" id="panel-quick">
+          <div class="calc-card">
+            <div style="text-align:center; margin-bottom:8px;">
+              <p style="margin:0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:rgba(34,32,27,0.55);">Rock, Paper, Scissors</p>
+            </div>
+            <div style="display:flex; justify-content:center; gap:10px; margin-bottom:16px;">
+              <button class="calc-tab rps-btn" data-choice="rock" aria-selected="false" style="cursor:pointer; padding:14px 18px;"><i data-lucide="hand"></i></button>
+              <button class="calc-tab rps-btn" data-choice="paper" aria-selected="false" style="cursor:pointer; padding:14px 18px;"><i data-lucide="file"></i></button>
+              <button class="calc-tab rps-btn" data-choice="scissors" aria-selected="false" style="cursor:pointer; padding:14px 18px;"><i data-lucide="scissors"></i></button>
+            </div>
+            <div class="calc-result" style="text-align:center; margin-bottom:26px;">
+              <div class="big" id="rpsOut">Pick rock, paper, or scissors!</div>
+              <div class="small" id="rpsScore">You: 0 · Computer: 0</div>
+            </div>
+
+            <div style="text-align:center; margin-bottom:8px;">
+              <p style="margin:0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:rgba(34,32,27,0.55);">Coin Flip</p>
+            </div>
+            <div style="text-align:center; margin-bottom:16px;">
+              <button id="coinFlipBtn" class="calc-tab" aria-selected="true" style="cursor:pointer; padding:11px 26px;">Flip Coin</button>
+            </div>
+            <div class="calc-result" style="text-align:center; margin-bottom:26px;">
+              <div class="big" id="coinOut">Tap to flip!</div>
+            </div>
+
+            <div style="text-align:center; margin-bottom:8px;">
+              <p style="margin:0; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:rgba(34,32,27,0.55);">Dice Roller</p>
+            </div>
+            <div style="display:flex; justify-content:center; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+              <button class="calc-tab dice-btn" data-sides="6" aria-selected="true" style="cursor:pointer;">D6</button>
+              <button class="calc-tab dice-btn" data-sides="4" aria-selected="false" style="cursor:pointer;">D4</button>
+              <button class="calc-tab dice-btn" data-sides="8" aria-selected="false" style="cursor:pointer;">D8</button>
+              <button class="calc-tab dice-btn" data-sides="12" aria-selected="false" style="cursor:pointer;">D12</button>
+              <button class="calc-tab dice-btn" data-sides="20" aria-selected="false" style="cursor:pointer;">D20</button>
+            </div>
+            <div style="text-align:center; margin-bottom:16px;">
+              <button id="diceRollBtn" class="calc-tab" aria-selected="true" style="cursor:pointer; padding:11px 26px;">Roll</button>
+            </div>
+            <div class="calc-result" style="text-align:center;">
+              <div class="big" id="diceOut">Pick a die and roll!</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -142,6 +187,17 @@
     applyThemeIcon();
   });
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- Tab switching (this was missing — the actual bug) ----
+  const tabs = document.querySelectorAll('.calc-tab[data-target]');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.setAttribute('aria-selected','false'));
+      tab.setAttribute('aria-selected','true');
+      document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + tab.dataset.target).classList.add('active');
+    });
+  });
 
   // ---- Spin Wheel (fixed: segments now drawn starting from top, matching the pointer) ----
   const spinCanvas = document.getElementById('spinCanvas');
@@ -428,6 +484,54 @@
   document.getElementById('pinpointInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('pinpointGuess').click(); });
   document.getElementById('pinpointNew').addEventListener('click', loadPinpoint);
   loadPinpoint();
+
+  // ================= Rock Paper Scissors =================
+  let rpsWins = 0, rpsLosses = 0;
+  const RPS_ICONS = { rock: 'hand', paper: 'file', scissors: 'scissors' };
+  document.querySelectorAll('.rps-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const userChoice = btn.dataset.choice;
+      const choices = ['rock','paper','scissors'];
+      const compChoice = choices[Math.floor(Math.random() * 3)];
+      let result;
+      if (userChoice === compChoice) result = "It's a tie!";
+      else if (
+        (userChoice === 'rock' && compChoice === 'scissors') ||
+        (userChoice === 'paper' && compChoice === 'rock') ||
+        (userChoice === 'scissors' && compChoice === 'paper')
+      ) { result = 'You win!'; rpsWins++; }
+      else { result = 'Computer wins!'; rpsLosses++; }
+      document.getElementById('rpsOut').innerHTML = `You: <i data-lucide="${RPS_ICONS[userChoice]}" style="width:16px;height:16px;vertical-align:-3px;"></i> vs Computer: <i data-lucide="${RPS_ICONS[compChoice]}" style="width:16px;height:16px;vertical-align:-3px;"></i> — ${result}`;
+      document.getElementById('rpsScore').textContent = `You: ${rpsWins} · Computer: ${rpsLosses}`;
+      if (window.lucide) lucide.createIcons();
+    });
+  });
+
+  // ================= Coin Flip =================
+  document.getElementById('coinFlipBtn').addEventListener('click', () => {
+    const result = Math.random() < 0.5 ? 'Heads' : 'Tails';
+    document.getElementById('coinOut').textContent = 'Flipping…';
+    setTimeout(() => {
+      document.getElementById('coinOut').textContent = result;
+    }, 400);
+  });
+
+  // ================= Dice Roller =================
+  let diceSides = 6;
+  document.querySelectorAll('.dice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.dice-btn').forEach(b => b.setAttribute('aria-selected','false'));
+      btn.setAttribute('aria-selected','true');
+      diceSides = parseInt(btn.dataset.sides, 10);
+    });
+  });
+  document.getElementById('diceRollBtn').addEventListener('click', () => {
+    const roll = Math.floor(Math.random() * diceSides) + 1;
+    document.getElementById('diceOut').textContent = 'Rolling…';
+    setTimeout(() => {
+      document.getElementById('diceOut').textContent = `You rolled: ${roll} (out of D${diceSides})`;
+    }, 300);
+  });
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>if(window.lucide){ lucide.createIcons(); }</script>

@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="style.css">
 <script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 </head>
 <body>
 <div id="introScreen" style="position:fixed; inset:0; background:var(--indigo); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity .6s ease;">
@@ -107,13 +107,13 @@
       <a class="nav-card" href="/news">
         <div class="icon3d icon3d-rates"><i data-lucide="newspaper"></i></div>
         <h3>News</h3>
-        <p>Live headlines — India, Tech, and Business.</p>
+        <p>Live headlines — Local, India, Tech, and Business, with images.</p>
         <span class="goto">Read news →</span>
       </a>
       <a class="nav-card" href="/fun">
         <div class="icon3d icon3d-fun"><i data-lucide="dices"></i></div>
         <h3>Fun</h3>
-        <p>Spin the wheel, or try the Queens, Tango, and Pinpoint puzzles.</p>
+        <p>Spin the wheel, solve puzzles, or play a quick game.</p>
         <span class="goto">Spin now →</span>
       </a>
       <a class="nav-card" href="/todo">
@@ -365,7 +365,13 @@
     const text = document.getElementById('qrInput').value.trim() || 'https://example.com';
     const box = document.getElementById('qrBox');
     box.innerHTML = '';
-    new QRCode(box, { text, width: 200, height: 200, colorDark: '#1B2A4A', colorLight: '#ffffff' });
+    const canvas = document.createElement('canvas');
+    box.appendChild(canvas);
+    QRCode.toCanvas(canvas, text, { width: 200, margin: 2, color: { dark: '#1B2A4A', light: '#ffffff' } }, function(error){
+      if (error) {
+        box.innerHTML = '<p style="font-size:13px; color:#b3401f; padding:20px;">Could not generate a QR code for this text.</p>';
+      }
+    });
   }
   document.getElementById('qrInput').addEventListener('input', renderQR);
   document.getElementById('qrDownload').addEventListener('click', () => {

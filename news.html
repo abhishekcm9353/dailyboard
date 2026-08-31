@@ -39,13 +39,18 @@
 
     <div class="calc-layout">
       <div class="calc-sidebar" role="tablist">
-        <button class="calc-tab" role="tab" aria-selected="true" data-target="india">India</button>
+        <button class="calc-tab" role="tab" aria-selected="true" data-target="local">Local</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="india">India</button>
         <button class="calc-tab" role="tab" aria-selected="false" data-target="tech">Tech</button>
         <button class="calc-tab" role="tab" aria-selected="false" data-target="business">Business</button>
       </div>
       <div class="calc-content">
 
-        <div class="calc-panel active" id="panel-india">
+        <div class="calc-panel active" id="panel-local">
+          <p id="localLabel" style="font-size:13px; color:var(--ink); opacity:.7; margin:0 0 14px;">Detecting your location…</p>
+          <div id="newsLocal" class="news-grid"><div class="calc-card">Loading local headlines…</div></div>
+        </div>
+        <div class="calc-panel" id="panel-india">
           <div id="newsIndia" class="news-grid"><div class="calc-card">Loading headlines…</div></div>
         </div>
         <div class="calc-panel" id="panel-tech">
@@ -57,7 +62,7 @@
 
       </div>
     </div>
-    <div class="rate-caption" style="margin-top:20px;">Headlines are pulled live from Google News RSS feeds. Tap any headline to read the full story on the original publisher's site.</div>
+    <div class="rate-caption" style="margin-top:20px;">Headlines are pulled live from Google News RSS feeds. Local news is based on your browser location. Tap any headline to read the full story on the original publisher's site.</div>
   </section>
 </main>
 
@@ -126,8 +131,11 @@
     }
     container.innerHTML = items.slice(0, 10).map(item => {
       const snippet = stripHtml(item.description).slice(0, 140);
+      const img = item.thumbnail || (item.enclosure && item.enclosure.link) || '';
+      const imgHtml = img ? `<img src="${img}" loading="lazy" style="width:calc(100% + 44px); height:150px; object-fit:cover; border-radius:14px 14px 0 0; margin:-22px -22px 6px;">` : '';
       return `
         <a class="post news-item" href="${item.link}" target="_blank" rel="noopener noreferrer">
+          ${imgHtml}
           <div class="tag">${timeAgo(item.pubDate)}</div>
           <h3>${item.title}</h3>
           <p>${snippet}${snippet.length === 140 ? '…' : ''}</p>
@@ -135,7 +143,7 @@
     }).join('');
   }
 
-  async function loadNews(category, containerId){
+  async function loadNews(category, containerId, feedUrlOverride){
     const cacheKey = `dailyboard_news_${category}`;
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null');
@@ -146,7 +154,8 @@
     } catch(e) {}
 
     try {
-      const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(FEEDS[category])}&api_key=${RSS2JSON_KEY}&count=10`;
+      const feedUrl = feedUrlOverride || FEEDS[category];
+      const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&api_key=${RSS2JSON_KEY}&count=10`;
       const res = await fetch(url);
       const data = await res.json();
       if (data.status !== 'ok') throw new Error(data.message || 'feed error');
@@ -160,6 +169,33 @@
   loadNews('india', 'newsIndia');
   loadNews('tech', 'newsTech');
   loadNews('business', 'newsBusiness');
+
+  // ---- Local news: browser geolocation -> reverse geocode (BigDataCloud, free, no key) -> city-based Google News search ----
+  async function loadLocalNews(){
+    if (!navigator.geolocation) {
+      document.getElementById('localLabel').textContent = 'Location not available in this browser — showing India headlines instead.';
+      loadNews('india', 'newsLocal');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      try {
+        const { latitude, longitude } = pos.coords;
+        const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+        const geo = await geoRes.json();
+        const city = geo.city || geo.locality || geo.principalSubdivision || 'India';
+        document.getElementById('localLabel').textContent = `Showing news near ${city}`;
+        const localFeed = `https://news.google.com/rss/search?q=${encodeURIComponent(city)}&hl=en-IN&gl=IN&ceid=IN:en`;
+        loadNews('local_' + city.replace(/\s+/g,'_'), 'newsLocal', localFeed);
+      } catch(e) {
+        document.getElementById('localLabel').textContent = 'Could not detect your city — showing India headlines instead.';
+        loadNews('india', 'newsLocal');
+      }
+    }, () => {
+      document.getElementById('localLabel').textContent = 'Location permission denied — showing India headlines instead.';
+      loadNews('india', 'newsLocal');
+    });
+  }
+  loadLocalNews();
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>if(window.lucide){ lucide.createIcons(); }</script>
