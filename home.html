@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="style.css">
 <script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.4.4/qrcode.min.js"></script>
 </head>
 <body>
 <div id="introScreen" style="position:fixed; inset:0; background:var(--indigo); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity .6s ease;">
@@ -365,6 +365,10 @@
     const text = document.getElementById('qrInput').value.trim() || 'https://example.com';
     const box = document.getElementById('qrBox');
     box.innerHTML = '';
+    if (typeof QRCode === 'undefined') {
+      box.innerHTML = '<p style="font-size:13px; color:#b3401f; padding:20px;">QR library failed to load — please refresh the page.</p>';
+      return;
+    }
     const canvas = document.createElement('canvas');
     box.appendChild(canvas);
     QRCode.toCanvas(canvas, text, { width: 200, margin: 2, color: { dark: '#1B2A4A', light: '#ffffff' } }, function(error){
