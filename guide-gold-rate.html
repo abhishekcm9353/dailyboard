@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why gold shop prices differ from the live rate | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+<meta name="description" content="How gold rates are built from international prices, purity, duty, GST and making charges.">
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
+  <div class="navlinks" id="navLinks">
+    <a href="/home">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/calendar">Calendar</a>
+    <a href="/news">News</a>
+    <a href="/fun">Fun</a>
+    <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Guide: Gold</div>
+      <h2>Why gold shop prices differ from the live rate</h2>
+    </div>
+    <div class="calc-card policy-text">
+      <p>Gold prices are quoted in many places, and they often do not match. The live rate on our Rates page is the starting point, but the price you pay at a jeweller can be higher. Here is why.</p>
+      <h3>Where the base price comes from</h3>
+      <p>Gold trades internationally in US dollars per troy ounce. One troy ounce is about 31.10 grams. To get a price per gram in rupees, the dollar price is divided by 31.10 and multiplied by the current dollar to rupee exchange rate.</p>
+      <h3>Purity</h3>
+      <p>24 karat gold is about 99.9% pure. 22 karat gold is 91.6% pure, which is the most common jewellery grade. 18 karat gold is 75% pure. A 22 karat gram costs less than a 24 karat gram because it contains less gold.</p>
+      <h3>Duty, GST and making charges</h3>
+      <p>Import duty and GST are added on top of the base price. Jewellers also add making charges, which pay for design and labour and can vary widely. Some shops also charge for wastage. Making charges are usually shown as a percentage or a fixed amount per gram.</p>
+      <h3>How to compare fairly</h3>
+      <p>Compare the same purity and the same weight. Ask for the total price, including making charges and GST, before you decide. Check that the gold has a BIS hallmark, which confirms its purity.</p>
+      <h3>Reading the live rate</h3>
+      <p>Gold prices change during the day. Our live rates are a reference, not a shop quote. Use them to understand the trend, then confirm the exact price with your jeweller on the day of purchase.</p>
+      <p style="margin-top:22px;"><a href="/rates" style="font-weight:700; color:var(--turmeric-dim);">See the live rates &rarr;</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>&copy; <span id="year"></span> DailyBoard &middot; <a href="/privacy">Privacy Policy</a> &middot; <a href="/contact">Contact</a> &middot; <a href="/guides">Guides</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => { const open = navLinks.classList.toggle('open'); navToggle.setAttribute('aria-expanded', open); });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>'; if (window.lucide) lucide.createIcons(); }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => { const isDark = document.documentElement.getAttribute('data-theme') === 'dark'; if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); } else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); } applyThemeIcon(); });
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide){ lucide.createIcons(); }</script>
+<script src="chatbot.js"></script>
+<script src="scroll-theme.js"></script>
+</body>
+</html>

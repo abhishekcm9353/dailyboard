@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculators | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
+  <div class="navlinks" id="navLinks">
+    <a href="/home">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator" class="current">Calculators</a>
+        <a href="/calendar">Calendar</a>
+    <a href="/news">News</a>
+        <a href="/fun">Fun</a>
+        <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Tools</div>
+      <h2>Calculators</h2>
+      <p>EMI, CGPA, age, experience, currency, units, BMI, interest, tax, percentage, SIP, GST, discount, and word count.</p>
+    </div>
+
+    <div class="calc-layout">
+      <div class="calc-sidebar" role="tablist">
+        <button class="calc-tab" role="tab" aria-selected="true" data-target="emi">EMI</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="cgpa">CGPA → %</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="age">Age</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="exp">Experience</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="currency">Currency</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="unit">Units</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="bmi">BMI</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="interest">Interest</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="tax">Tax (India)</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="pct">Percentage</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="sip">SIP</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="gst">GST</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="discount">Discount</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="wordcount">Word Count</button>
+        <button class="calc-tab" role="tab" aria-selected="false" data-target="qr">QR Code</button>
+      </div>
+      <div class="calc-content">
+
+    <div class="calc-panel active" id="panel-emi">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="loanAmt">Loan Amount (₹)</label><input type="number" id="loanAmt" value="500000"></div>
+          <div class="field"><label for="loanRate">Interest Rate (% p.a.)</label><input type="number" id="loanRate" value="9.5" step="0.1"></div>
+          <div class="field"><label for="loanYears">Tenure (years)</label><input type="number" id="loanYears" value="5"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="emiOut">₹ 0 / month</div>
+          <div class="small" id="emiSub">Total payable: —</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-cgpa">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="cgpaVal">Your CGPA (out of 10)</label><input type="number" id="cgpaVal" value="8.5" step="0.01" min="0" max="10"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="cgpaOut">Percentage: 0%</div>
+          <div class="small">Formula used: Percentage = CGPA × 9.5 (standard 10-point scale conversion)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-age">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field">
+            <label for="dob">Date of Birth (DD/MM/YYYY)</label>
+            <input type="text" id="dob" placeholder="DD/MM/YYYY" maxlength="10" inputmode="numeric">
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="ageOut">Type a date, e.g. 15/08/1995</div>
+          <div class="small" id="ageSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-exp">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field">
+            <label for="joinDate">Joining Date (DD/MM/YYYY)</label>
+            <input type="text" id="joinDate" placeholder="DD/MM/YYYY" maxlength="10" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="endDate">As of Date (leave blank for today)</label>
+            <input type="text" id="endDate" placeholder="DD/MM/YYYY" maxlength="10" inputmode="numeric">
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="expOut">Type your joining date, e.g. 01/06/2022</div>
+          <div class="small" id="expSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+    <div class="calc-panel" id="panel-currency">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="curAmt">Amount</label><input type="number" id="curAmt" value="100"></div>
+          <div class="field">
+            <label for="curFrom">From</label>
+            <select id="curFrom" style="width:100%; padding:11px 12px; border-radius:9px; border:1px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:15px; background:var(--paper);">
+              <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option>
+              <option value="AED">AED</option><option value="SGD">SGD</option><option value="AUD">AUD</option>
+              <option value="CAD">CAD</option><option value="JPY">JPY</option><option value="INR" selected>INR</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="curTo">To</label>
+            <select id="curTo" style="width:100%; padding:11px 12px; border-radius:9px; border:1px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:15px; background:var(--paper);">
+              <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option>
+              <option value="AED">AED</option><option value="SGD">SGD</option><option value="AUD">AUD</option>
+              <option value="CAD">CAD</option><option value="JPY">JPY</option><option value="INR" selected>INR</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="curOut">Loading rates…</div>
+          <div class="small" id="curSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-unit">
+      <div class="calc-card">
+        <div class="calc-tabs" role="tablist" style="margin-bottom:14px;">
+          <button class="calc-tab" role="tab" aria-selected="true" data-unit="length">km ↔ miles</button>
+          <button class="calc-tab" role="tab" aria-selected="false" data-unit="weight">kg ↔ lbs</button>
+          <button class="calc-tab" role="tab" aria-selected="false" data-unit="temp">°C ↔ °F</button>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="unitInput" id="unitFromLabel">Kilometers</label><input type="number" id="unitInput" value="10"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="unitOut">—</div>
+          <div class="small" id="unitSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-bmi">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="bmiHeight">Height (cm)</label><input type="number" id="bmiHeight" value="170"></div>
+          <div class="field"><label for="bmiWeight">Weight (kg)</label><input type="number" id="bmiWeight" value="65"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="bmiOut">BMI: 0</div>
+          <div class="small" id="bmiSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+    <div class="calc-panel" id="panel-interest">
+      <div class="calc-card">
+        <div class="calc-tabs" role="tablist" style="margin-bottom:14px;">
+          <button class="calc-tab" role="tab" aria-selected="true" data-interest="simple">Simple Interest</button>
+          <button class="calc-tab" role="tab" aria-selected="false" data-interest="compound">Compound Interest</button>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="intPrincipal">Principal (₹)</label><input type="number" id="intPrincipal" value="100000"></div>
+          <div class="field"><label for="intRate">Rate (% p.a.)</label><input type="number" id="intRate" value="7" step="0.1"></div>
+          <div class="field"><label for="intYears">Time (years)</label><input type="number" id="intYears" value="3" step="0.1"></div>
+          <div class="field" id="intFreqField" style="display:none;">
+            <label for="intFreq">Compounding</label>
+            <select id="intFreq" style="width:100%; padding:11px 12px; border-radius:9px; border:1px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:15px; background:var(--paper);">
+              <option value="1">Annually</option><option value="2">Semi-annually</option>
+              <option value="4">Quarterly</option><option value="12">Monthly</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="intOut">₹ 0</div>
+          <div class="small" id="intSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-tax">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="taxIncome">Annual Gross Income (₹)</label><input type="number" id="taxIncome" value="1200000"></div>
+          <div class="field"><label for="taxDeductions">Old Regime Deductions (80C, HRA, etc.) (₹)</label><input type="number" id="taxDeductions" value="150000"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="taxOut">—</div>
+          <div class="small" id="taxSub">&nbsp;</div>
+        </div>
+        <div class="rate-caption" style="margin-top:14px;">Based on FY 2026-27 slabs. New regime: standard deduction ₹75,000, rebate makes tax nil up to ₹12L taxable income. Old regime: standard deduction ₹50,000, rebate makes tax nil up to ₹5L taxable income. Includes 4% health & education cess. This is an estimate, not tax advice — surcharge for very high incomes isn't included.</div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-pct">
+      <div class="calc-card">
+        <div class="section-head" style="margin-bottom:14px;">
+          <p class="pct-label">X% of Y</p>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="pctX1">Percentage (X)</label><input type="number" id="pctX1" value="20"></div>
+          <div class="field"><label for="pctY1">Of value (Y)</label><input type="number" id="pctY1" value="500"></div>
+        </div>
+        <div class="calc-result" style="margin-bottom:24px;">
+          <div class="big" id="pctOut1">0</div>
+        </div>
+
+        <div class="section-head" style="margin-bottom:14px;">
+          <p class="pct-label">X is what % of Y</p>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="pctX2">Part (X)</label><input type="number" id="pctX2" value="150"></div>
+          <div class="field"><label for="pctY2">Whole (Y)</label><input type="number" id="pctY2" value="500"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="pctOut2">0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-sip">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="sipAmt">Monthly Investment (₹)</label><input type="number" id="sipAmt" value="5000"></div>
+          <div class="field"><label for="sipRate">Expected Annual Return (%)</label><input type="number" id="sipRate" value="12" step="0.1"></div>
+          <div class="field"><label for="sipYears">Time Period (years)</label><input type="number" id="sipYears" value="10"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="sipOut">₹ 0</div>
+          <div class="small" id="sipSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-gst">
+      <div class="calc-card">
+        <div class="calc-tabs" role="tablist" style="margin-bottom:14px;">
+          <button class="calc-tab" role="tab" aria-selected="true" data-gst="add">Add GST</button>
+          <button class="calc-tab" role="tab" aria-selected="false" data-gst="remove">Remove GST</button>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="gstAmt" id="gstAmtLabel">Amount (excl. GST)</label><input type="number" id="gstAmt" value="1000"></div>
+          <div class="field">
+            <label for="gstRate">GST Rate</label>
+            <select id="gstRate" style="width:100%; padding:11px 12px; border-radius:9px; border:1px solid var(--line); font-family:'IBM Plex Mono',monospace; font-size:15px; background:var(--paper);">
+              <option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="gstOut">₹ 0</div>
+          <div class="small" id="gstSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="calc-panel" id="panel-discount">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field"><label for="discPrice">Original Price (₹)</label><input type="number" id="discPrice" value="1000"></div>
+          <div class="field"><label for="discPct">Discount (%)</label><input type="number" id="discPct" value="20"></div>
+        </div>
+        <div class="calc-result">
+          <div class="big" id="discOut">₹ 0</div>
+          <div class="small" id="discSub">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-panel" id="panel-qr">
+          <div class="calc-card">
+            <div class="field-row">
+              <div class="field" style="grid-column:1/-1;">
+                <label for="qrInput">Text or URL</label>
+                <input type="text" id="qrInput" placeholder="https://example.com" value="https://dailyboard-acm.vercel.app">
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:14px; padding:20px 0;">
+              <div id="qrBox" style="background:#fff; padding:16px; border-radius:12px;"></div>
+              <button id="qrDownload" class="calc-tab" aria-selected="true" style="cursor:pointer;">Download PNG</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="calc-panel" id="panel-wordcount">
+      <div class="calc-card">
+        <div class="field-row">
+          <div class="field" style="grid-column:1/-1;">
+            <label for="wcInput">Paste or type your text</label>
+            <textarea id="wcInput" rows="8" placeholder="Start typing…" style="width:100%; padding:12px; border-radius:9px; border:1px solid var(--line); font-size:15px; background:var(--paper); font-family:'Inter',sans-serif; resize:vertical;"></textarea>
+          </div>
+        </div>
+        <div class="board-grid light-tiles">
+          <div class="board-tile">
+            <div class="label">Words</div>
+            <div class="value mono" id="wcWords">0</div>
+          </div>
+          <div class="board-tile">
+            <div class="label">Characters</div>
+            <div class="value mono" id="wcChars">0</div>
+          </div>
+          <div class="board-tile">
+            <div class="label">Sentences</div>
+            <div class="value mono" id="wcSentences">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a> &middot; <a href="/guides">Guides</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>'; if (window.lucide) lucide.createIcons(); }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const tabs = document.querySelectorAll('.calc-tab[data-target]');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.setAttribute('aria-selected','false'));
+      tab.setAttribute('aria-selected','true');
+      document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + tab.dataset.target).classList.add('active');
+    });
+  });
+
+  // ---- EMI ----
+  function calcEMI(){
+    const P = parseFloat(document.getElementById('loanAmt').value) || 0;
+    const annualRate = parseFloat(document.getElementById('loanRate').value) || 0;
+    const years = parseFloat(document.getElementById('loanYears').value) || 0;
+    const r = annualRate / 12 / 100;
+    const n = years * 12;
+    if (P <= 0 || r <= 0 || n <= 0) {
+      document.getElementById('emiOut').textContent = '₹ 0 / month';
+      document.getElementById('emiSub').textContent = 'Enter valid values';
+      return;
+    }
+    const emi = P * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+    const total = emi * n;
+    document.getElementById('emiOut').textContent = `₹ ${emi.toFixed(0)} / month`;
+    document.getElementById('emiSub').textContent = `Total payable: ₹ ${total.toFixed(0)} (interest: ₹ ${(total-P).toFixed(0)})`;
+  }
+  ['loanAmt','loanRate','loanYears'].forEach(id => document.getElementById(id).addEventListener('input', calcEMI));
+  calcEMI();
+
+  // ---- CGPA to Percentage ----
+  function calcCGPA(){
+    const cgpa = parseFloat(document.getElementById('cgpaVal').value) || 0;
+    const pct = Math.min(100, Math.max(0, cgpa * 9.5));
+    document.getElementById('cgpaOut').textContent = `Percentage: ${pct.toFixed(2)}%`;
+  }
+  document.getElementById('cgpaVal').addEventListener('input', calcCGPA);
+  calcCGPA();
+
+  // ---- Helpers for DD/MM/YYYY typeable date fields ----
+  function autoSlash(e){
+    let v = e.target.value.replace(/\D/g,'').slice(0,8);
+    if (v.length >= 5) v = v.slice(0,2) + '/' + v.slice(2,4) + '/' + v.slice(4);
+    else if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+    e.target.value = v;
+  }
+  function parseDMY(str){
+    if (!str) return null;
+    const m = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (!m) return null;
+    const day = parseInt(m[1],10), month = parseInt(m[2],10), year = parseInt(m[3],10);
+    if (month < 1 || month > 12 || day < 1 || day > 31) return null;
+    const d = new Date(year, month - 1, day);
+    if (d.getFullYear() !== year || d.getMonth() !== month - 1 || d.getDate() !== day) return null;
+    return d;
+  }
+
+  // ---- Age ----
+  const dobInput = document.getElementById('dob');
+  dobInput.addEventListener('input', autoSlash);
+  dobInput.addEventListener('input', () => {
+    const dob = parseDMY(dobInput.value);
+    if (!dob) return;
+    const today = new Date();
+    if (dob > today) {
+      document.getElementById('ageOut').textContent = 'Date cannot be in the future';
+      document.getElementById('ageSub').textContent = '';
+      return;
+    }
+    let years = today.getFullYear() - dob.getFullYear();
+    let months = today.getMonth() - dob.getMonth();
+    let days = today.getDate() - dob.getDate();
+    if (days < 0) { months -= 1; days += new Date(today.getFullYear(), today.getMonth(), 0).getDate(); }
+    if (months < 0) { years -= 1; months += 12; }
+    document.getElementById('ageOut').textContent = `${years} years, ${months} months, ${days} days`;
+    document.getElementById('ageSub').textContent = `Total days lived: ${Math.floor((today - dob) / 86400000)}`;
+  });
+
+  // ---- Years of Experience ----
+  const joinInput = document.getElementById('joinDate');
+  const endInput = document.getElementById('endDate');
+  joinInput.addEventListener('input', autoSlash);
+  endInput.addEventListener('input', autoSlash);
+
+  function calcExperience(){
+    const join = parseDMY(joinInput.value);
+    if (!join) return;
+    const end = endInput.value ? parseDMY(endInput.value) : new Date();
+    if (!end || end < join) {
+      document.getElementById('expOut').textContent = 'Check the dates entered';
+      document.getElementById('expSub').textContent = '';
+      return;
+    }
+    let years = end.getFullYear() - join.getFullYear();
+    let months = end.getMonth() - join.getMonth();
+    let days = end.getDate() - join.getDate();
+    if (days < 0) { months -= 1; days += new Date(end.getFullYear(), end.getMonth(), 0).getDate(); }
+    if (months < 0) { years -= 1; months += 12; }
+    document.getElementById('expOut').textContent = `${years} years, ${months} months, ${days} days`;
+    document.getElementById('expSub').textContent = `Total experience in months: ${(years*12+months)} · Total days: ${Math.floor((end - join) / 86400000)}`;
+  }
+  joinInput.addEventListener('input', calcExperience);
+  endInput.addEventListener('input', calcExperience);
+
+  // ---- Currency Converter (Frankfurter, free, no key) ----
+  const curAmt = document.getElementById('curAmt');
+  const curFrom = document.getElementById('curFrom');
+  const curTo = document.getElementById('curTo');
+  let curDebounce;
+  async function calcCurrency(){
+    clearTimeout(curDebounce);
+    curDebounce = setTimeout(async () => {
+      const amt = parseFloat(curAmt.value) || 0;
+      const from = curFrom.value, to = curTo.value;
+      if (from === to) {
+        document.getElementById('curOut').textContent = `${amt.toFixed(2)} ${to}`;
+        document.getElementById('curSub').textContent = 'Same currency selected';
+        return;
+      }
+      document.getElementById('curOut').textContent = 'Loading…';
+      try {
+        const res = await fetch(`https://api.frankfurter.dev/v1/latest?amount=${amt}&from=${from}&to=${to}`);
+        const data = await res.json();
+        const converted = data.rates[to];
+        document.getElementById('curOut').textContent = `${converted.toFixed(2)} ${to}`;
+        document.getElementById('curSub').textContent = `1 ${from} = ${(converted/amt).toFixed(4)} ${to} · rate as of ${data.date}`;
+      } catch(e) {
+        document.getElementById('curOut').textContent = 'Unavailable';
+        document.getElementById('curSub').textContent = 'Live rate feed unreachable right now';
+      }
+    }, 300);
+  }
+  [curAmt, curFrom, curTo].forEach(el => el.addEventListener('input', calcCurrency));
+  calcCurrency();
+
+  // ---- Unit Converter ----
+  let unitMode = 'length';
+  const unitTabs = document.querySelectorAll('.calc-tab[data-unit]');
+  const unitInput = document.getElementById('unitInput');
+  const unitFromLabel = document.getElementById('unitFromLabel');
+  unitTabs.forEach(t => {
+    t.addEventListener('click', () => {
+      unitTabs.forEach(u => u.setAttribute('aria-selected','false'));
+      t.setAttribute('aria-selected','true');
+      unitMode = t.dataset.unit;
+      if (unitMode === 'length') { unitFromLabel.textContent = 'Kilometers'; unitInput.value = 10; }
+      if (unitMode === 'weight') { unitFromLabel.textContent = 'Kilograms'; unitInput.value = 70; }
+      if (unitMode === 'temp') { unitFromLabel.textContent = 'Celsius'; unitInput.value = 25; }
+      calcUnit();
+    });
+  });
+  function calcUnit(){
+    const v = parseFloat(unitInput.value) || 0;
+    let out = '', sub = '';
+    if (unitMode === 'length') {
+      out = `${(v * 0.621371).toFixed(3)} miles`;
+      sub = `${v} km = ${(v * 0.621371).toFixed(3)} miles`;
+    } else if (unitMode === 'weight') {
+      out = `${(v * 2.20462).toFixed(2)} lbs`;
+      sub = `${v} kg = ${(v * 2.20462).toFixed(2)} lbs`;
+    } else if (unitMode === 'temp') {
+      out = `${((v * 9/5) + 32).toFixed(1)} °F`;
+      sub = `${v}°C = ${((v * 9/5) + 32).toFixed(1)}°F`;
+    }
+    document.getElementById('unitOut').textContent = out;
+    document.getElementById('unitSub').textContent = sub;
+  }
+  unitInput.addEventListener('input', calcUnit);
+  calcUnit();
+
+  // ---- BMI ----
+  function calcBMI(){
+    const h = parseFloat(document.getElementById('bmiHeight').value) || 0;
+    const w = parseFloat(document.getElementById('bmiWeight').value) || 0;
+    if (h <= 0 || w <= 0) {
+      document.getElementById('bmiOut').textContent = 'BMI: 0';
+      document.getElementById('bmiSub').textContent = 'Enter valid height and weight';
+      return;
+    }
+    const meters = h / 100;
+    const bmi = w / (meters * meters);
+    let category;
+    if (bmi < 18.5) category = 'Underweight';
+    else if (bmi < 25) category = 'Normal';
+    else if (bmi < 30) category = 'Overweight';
+    else category = 'Obese';
+    document.getElementById('bmiOut').textContent = `BMI: ${bmi.toFixed(1)}`;
+    document.getElementById('bmiSub').textContent = `Category: ${category} (WHO standard ranges)`;
+  }
+  document.getElementById('bmiHeight').addEventListener('input', calcBMI);
+  document.getElementById('bmiWeight').addEventListener('input', calcBMI);
+  calcBMI();
+
+  // ---- Simple / Compound Interest ----
+  let interestMode = 'simple';
+  const intTabs = document.querySelectorAll('.calc-tab[data-interest]');
+  intTabs.forEach(t => {
+    t.addEventListener('click', () => {
+      intTabs.forEach(u => u.setAttribute('aria-selected','false'));
+      t.setAttribute('aria-selected','true');
+      interestMode = t.dataset.interest;
+      document.getElementById('intFreqField').style.display = interestMode === 'compound' ? 'block' : 'none';
+      calcInterest();
+    });
+  });
+  function calcInterest(){
+    const P = parseFloat(document.getElementById('intPrincipal').value) || 0;
+    const R = parseFloat(document.getElementById('intRate').value) || 0;
+    const T = parseFloat(document.getElementById('intYears').value) || 0;
+    if (interestMode === 'simple') {
+      const SI = (P * R * T) / 100;
+      document.getElementById('intOut').textContent = `₹ ${SI.toFixed(0)} interest`;
+      document.getElementById('intSub').textContent = `Maturity value: ₹ ${(P + SI).toFixed(0)}`;
+    } else {
+      const n = parseFloat(document.getElementById('intFreq').value) || 1;
+      const A = P * Math.pow(1 + (R/100)/n, n*T);
+      const CI = A - P;
+      document.getElementById('intOut').textContent = `₹ ${CI.toFixed(0)} interest`;
+      document.getElementById('intSub').textContent = `Maturity value: ₹ ${A.toFixed(0)}`;
+    }
+  }
+  ['intPrincipal','intRate','intYears','intFreq'].forEach(id => document.getElementById(id).addEventListener('input', calcInterest));
+  calcInterest();
+
+  // ---- India Tax Calculator (FY 2026-27) ----
+  function slabTax(taxable, brackets){
+    let tax = 0;
+    for (const [lo, hi, rate] of brackets) {
+      if (taxable > lo) tax += (Math.min(taxable, hi) - lo) * rate;
+    }
+    return tax;
+  }
+  const NEW_REGIME_BRACKETS = [
+    [0,400000,0], [400000,800000,0.05], [800000,1200000,0.10],
+    [1200000,1600000,0.15], [1600000,2000000,0.20], [2000000,2400000,0.25], [2400000,Infinity,0.30]
+  ];
+  const OLD_REGIME_BRACKETS = [
+    [0,250000,0], [250000,500000,0.05], [500000,1000000,0.20], [1000000,Infinity,0.30]
+  ];
+  function calcTax(){
+    const income = parseFloat(document.getElementById('taxIncome').value) || 0;
+    const deductions = parseFloat(document.getElementById('taxDeductions').value) || 0;
+
+    const newTaxable = Math.max(0, income - 75000);
+    let newTax = newTaxable <= 1200000 ? 0 : slabTax(newTaxable, NEW_REGIME_BRACKETS);
+    newTax = newTax * 1.04;
+
+    const oldTaxable = Math.max(0, income - 50000 - deductions);
+    let oldTax = oldTaxable <= 500000 ? 0 : slabTax(oldTaxable, OLD_REGIME_BRACKETS);
+    oldTax = oldTax * 1.04;
+
+    const better = newTax <= oldTax ? 'New' : 'Old';
+    document.getElementById('taxOut').textContent = `New: ₹${Math.round(newTax).toLocaleString('en-IN')} · Old: ₹${Math.round(oldTax).toLocaleString('en-IN')}`;
+    document.getElementById('taxSub').textContent = `${better} regime is cheaper by ₹${Math.abs(Math.round(newTax-oldTax)).toLocaleString('en-IN')} for these numbers (includes 4% cess)`;
+  }
+  ['taxIncome','taxDeductions'].forEach(id => document.getElementById(id).addEventListener('input', calcTax));
+  calcTax();
+
+  // ---- Percentage Calculator ----
+  function calcPct1(){
+    const x = parseFloat(document.getElementById('pctX1').value) || 0;
+    const y = parseFloat(document.getElementById('pctY1').value) || 0;
+    document.getElementById('pctOut1').textContent = ((x/100) * y).toLocaleString('en-IN', {maximumFractionDigits:2});
+  }
+  function calcPct2(){
+    const x = parseFloat(document.getElementById('pctX2').value) || 0;
+    const y = parseFloat(document.getElementById('pctY2').value) || 0;
+    document.getElementById('pctOut2').textContent = y === 0 ? '—' : `${((x/y)*100).toFixed(2)}%`;
+  }
+  ['pctX1','pctY1'].forEach(id => document.getElementById(id).addEventListener('input', calcPct1));
+  ['pctX2','pctY2'].forEach(id => document.getElementById(id).addEventListener('input', calcPct2));
+  calcPct1(); calcPct2();
+
+  // ---- SIP Calculator ----
+  function calcSIP(){
+    const P = parseFloat(document.getElementById('sipAmt').value) || 0;
+    const annualRate = parseFloat(document.getElementById('sipRate').value) || 0;
+    const years = parseFloat(document.getElementById('sipYears').value) || 0;
+    const r = annualRate / 12 / 100;
+    const n = years * 12;
+    if (P <= 0 || r <= 0 || n <= 0) {
+      document.getElementById('sipOut').textContent = '₹ 0';
+      document.getElementById('sipSub').textContent = 'Enter valid values';
+      return;
+    }
+    const FV = P * ((Math.pow(1+r, n) - 1) / r) * (1+r);
+    const invested = P * n;
+    const gain = FV - invested;
+    document.getElementById('sipOut').textContent = `₹ ${Math.round(FV).toLocaleString('en-IN')}`;
+    document.getElementById('sipSub').textContent = `Invested: ₹${Math.round(invested).toLocaleString('en-IN')} · Wealth gained: ₹${Math.round(gain).toLocaleString('en-IN')}`;
+  }
+  ['sipAmt','sipRate','sipYears'].forEach(id => document.getElementById(id).addEventListener('input', calcSIP));
+  calcSIP();
+
+  // ---- GST Calculator ----
+  let gstMode = 'add';
+  const gstTabs = document.querySelectorAll('.calc-tab[data-gst]');
+  gstTabs.forEach(t => {
+    t.addEventListener('click', () => {
+      gstTabs.forEach(u => u.setAttribute('aria-selected','false'));
+      t.setAttribute('aria-selected','true');
+      gstMode = t.dataset.gst;
+      document.getElementById('gstAmtLabel').textContent = gstMode === 'add' ? 'Amount (excl. GST)' : 'Amount (incl. GST)';
+      calcGST();
+    });
+  });
+  function calcGST(){
+    const amt = parseFloat(document.getElementById('gstAmt').value) || 0;
+    const rate = parseFloat(document.getElementById('gstRate').value) || 0;
+    if (gstMode === 'add') {
+      const gstAmount = amt * rate / 100;
+      document.getElementById('gstOut').textContent = `₹ ${(amt + gstAmount).toFixed(2)}`;
+      document.getElementById('gstSub').textContent = `GST (${rate}%): ₹${gstAmount.toFixed(2)} added to ₹${amt.toFixed(2)}`;
+    } else {
+      const base = amt / (1 + rate/100);
+      const gstAmount = amt - base;
+      document.getElementById('gstOut').textContent = `₹ ${base.toFixed(2)}`;
+      document.getElementById('gstSub').textContent = `GST (${rate}%): ₹${gstAmount.toFixed(2)} removed from ₹${amt.toFixed(2)}`;
+    }
+  }
+  ['gstAmt','gstRate'].forEach(id => document.getElementById(id).addEventListener('input', calcGST));
+  calcGST();
+
+  // ---- Discount Calculator ----
+  function calcDiscount(){
+    const price = parseFloat(document.getElementById('discPrice').value) || 0;
+    const pct = parseFloat(document.getElementById('discPct').value) || 0;
+    const saved = price * pct / 100;
+    const final = price - saved;
+    document.getElementById('discOut').textContent = `₹ ${final.toFixed(2)}`;
+    document.getElementById('discSub').textContent = `You save ₹${saved.toFixed(2)} off ₹${price.toFixed(2)}`;
+  }
+  ['discPrice','discPct'].forEach(id => document.getElementById(id).addEventListener('input', calcDiscount));
+  calcDiscount();
+
+  // ---- Word / Character Counter ----
+  function calcWordCount(){
+    const text = document.getElementById('wcInput').value;
+    const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    const chars = text.length;
+    const sentences = text.trim() === '' ? 0 : (text.match(/[.!?]+(\s|$)/g) || []).length || (text.trim() ? 1 : 0);
+    document.getElementById('wcWords').textContent = words;
+    document.getElementById('wcChars').textContent = chars;
+    document.getElementById('wcSentences').textContent = sentences;
+  }
+  document.getElementById('wcInput').addEventListener('input', calcWordCount);
+  calcWordCount();
+  
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide){ lucide.createIcons(); }</script>
+<script src="chatbot.js"></script>
+<script src="scroll-theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How SIP works | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+<meta name="description" content="What a SIP is, how its future value is estimated, and a worked example.">
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
+  <div class="navlinks" id="navLinks">
+    <a href="/home">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/calendar">Calendar</a>
+    <a href="/news">News</a>
+    <a href="/fun">Fun</a>
+    <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+<main id="main">
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Guide: Investing</div>
+      <h2>How SIP works</h2>
+    </div>
+    <div class="calc-card policy-text">
+      <p>A Systematic Investment Plan (SIP) lets you invest a fixed amount at regular intervals, usually every month, into a mutual fund. Small regular amounts make it easier to start, and the habit matters as much as the amount.</p>
+      <h3>Why compounding matters</h3>
+      <p>When your returns earn returns of their own, your money grows faster over time. This is compounding. The longer the period, the stronger the effect, which is why starting early usually helps more than investing a larger amount later.</p>
+      <h3>How the estimate is calculated</h3>
+      <p>Our SIP calculator uses the monthly rate (annual expected return divided by 12) and assumes each instalment is invested at the start of the month. The estimated value is:</p>
+      <p>Future value = P &times; [((1 + i)<sup>n</sup> &minus; 1) &divide; i] &times; (1 + i)</p>
+      <p>Here P is the monthly amount, i is the monthly return and n is the number of months.</p>
+      <h3>A worked example</h3>
+      <p>If you invest &#8377;5,000 every month for 10 years and the assumed return is 12% a year, you invest &#8377;6,00,000 in total. The estimated value is about &#8377;11,60,000, which means an estimated gain of about &#8377;5,60,000.</p>
+      <h3>Important limits</h3>
+      <p>Mutual fund returns are not guaranteed. Markets can rise and fall, and a fixed 12% a year is only an assumption for illustration. Past performance does not predict future results. Check the fund factsheet, its risk level, and the exit load before investing.</p>
+      <p>This guide explains the general method and is not investment advice. If you are unsure, speak to a SEBI registered adviser.</p>
+      <p style="margin-top:22px;"><a href="/calculator" style="font-weight:700; color:var(--turmeric-dim);">Try the SIP calculator &rarr;</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>&copy; <span id="year"></span> DailyBoard &middot; <a href="/privacy">Privacy Policy</a> &middot; <a href="/contact">Contact</a> &middot; <a href="/guides">Guides</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => { const open = navLinks.classList.toggle('open'); navToggle.setAttribute('aria-expanded', open); });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>'; if (window.lucide) lucide.createIcons(); }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => { const isDark = document.documentElement.getAttribute('data-theme') === 'dark'; if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); } else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); } applyThemeIcon(); });
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide){ lucide.createIcons(); }</script>
+<script src="chatbot.js"></script>
+<script src="scroll-theme.js"></script>
+</body>
+</html>

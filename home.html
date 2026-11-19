@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DailyBoard | Home</title>
+<meta name="description" content="Live rates and quick calculators, all in one place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Fraunces:wght@600;700&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+<canvas id="particleCanvas" style="position:fixed; inset:0; z-index:0; pointer-events:none; opacity:0; transition:opacity .5s ease;"></canvas>
+<div id="introScreen" style="position:fixed; inset:0; background:var(--indigo); z-index:9999; display:flex; align-items:center; justify-content:center; transition:opacity .6s ease;">
+  <div style="font-family:'Orbitron',sans-serif; font-weight:900; font-size:clamp(46px,13vw,120px); color:var(--chalk); letter-spacing:3px; display:flex; text-shadow:0 0 24px rgba(232,163,61,0.35);">
+    <span id="introText"></span><span id="introCursor" style="display:inline-block; width:0.06em; margin-left:4px; background:var(--turmeric); animation:introBlink 0.8s step-end infinite;">&nbsp;</span>
+  </div>
+</div>
+<style>@keyframes introBlink{50%{opacity:0;}}</style>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
+  <div class="navlinks" id="navLinks">
+    <a href="/home" class="current">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/calendar">Calendar</a>
+    <a href="/news">News</a>
+    <a href="/fun">Fun</a>
+    <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="board-wrap">
+    <div class="board">
+      <div class="board-eyebrow">— Welcome —</div>
+      <h1>Everything you need, in one place</h1>
+      <p class="tagline">Live weather, gold, silver and platinum rates, plus practical calculators.</p>
+
+      <div style="margin-top:20px;">
+        <input type="text" id="toolSearch" placeholder="Search a tool… e.g. BMI, EMI, Currency" list="toolList"
+          style="width:100%; max-width:420px; padding:12px 16px; border-radius:10px; border:none; font-size:15px; font-family:'Inter',sans-serif; background:rgba(244,241,230,0.12); color:var(--chalk);">
+        <datalist id="toolList">
+          <option value="EMI Calculator">
+          <option value="CGPA to Percentage">
+          <option value="Age Calculator">
+          <option value="Experience Calculator">
+          <option value="Currency Converter">
+          <option value="Unit Converter">
+          <option value="BMI Calculator">
+          <option value="Simple Interest">
+          <option value="Compound Interest">
+          <option value="Tax Calculator">
+          <option value="Percentage Calculator">
+          <option value="SIP Calculator">
+          <option value="GST Calculator">
+          <option value="Discount Calculator">
+          <option value="Word Count">
+          <option value="Weather">
+          <option value="Gold Rate">
+          <option value="Silver Rate">
+          <option value="Platinum Rate">
+          <option value="To-Do List">
+        </datalist>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Explore</div>
+      <h2>Where would you like to go?</h2>
+      <p>Pick a section below to get started.</p>
+    </div>
+    <div class="card-grid">
+      <a class="nav-card grad-card grad-2" href="/weather">
+        <div class="icon3d icon3d-weather"><i data-lucide="cloud-sun"></i></div>
+        <h3>Weather</h3>
+        <p>Live temperature, conditions, and a 3-day forecast for your location.</p>
+        <span class="goto">Check weather →</span>
+      </a>
+      <a class="nav-card grad-card grad-5" href="/rates">
+        <div class="icon3d icon3d-rates"><i data-lucide="line-chart"></i></div>
+        <h3>Rates</h3>
+        <p>Live gold, silver, and platinum rates, updated automatically.</p>
+        <span class="goto">View rates →</span>
+      </a>
+      <a class="nav-card grad-card grad-3" href="/calculator">
+        <div class="icon3d icon3d-calc"><i data-lucide="calculator"></i></div>
+        <h3>Calculators</h3>
+        <p>14 calculators — EMI, SIP, GST, tax, BMI, and more.</p>
+        <span class="goto">Open tools →</span>
+      </a>
+      <a class="nav-card grad-card grad-1" href="/news">
+        <div class="icon3d icon3d-rates"><i data-lucide="newspaper"></i></div>
+        <h3>News</h3>
+        <p>Live headlines — Local, India, Tech, and Business, with images.</p>
+        <span class="goto">Read news →</span>
+      </a>
+      <a class="nav-card grad-card grad-6" href="/fun">
+        <div class="icon3d icon3d-fun"><i data-lucide="dices"></i></div>
+        <h3>Fun</h3>
+        <p>Solve puzzles, or play Rock Paper Scissors.</p>
+        <span class="goto">Play now →</span>
+      </a>
+      <a class="nav-card grad-card grad-4" href="/todo">
+        <div class="icon3d icon3d-todo"><i data-lucide="list-checks"></i></div>
+        <h3>To-Do List</h3>
+        <p>Track your daily tasks — saved right in your browser.</p>
+        <span class="goto">Open list →</span>
+      </a>
+      <a class="nav-card grad-card grad-7" href="/about">
+        <div class="icon3d icon3d-about"><i data-lucide="user"></i></div>
+        <h3>About</h3>
+        <p>Background, skills, and how to get in touch.</p>
+        <span class="goto">Learn more →</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="calendar">
+  <div class="section-head">
+    <div class="eyebrow">Calendar</div>
+    <h2>Monthly Calendar</h2>
+    <p>Holidays and festivals are marked. Use the arrows to browse months.</p>
+  </div>
+  <div class="calc-card">
+    <div class="cal-toolbar">
+      <button class="calc-tab" id="calPrev" aria-label="Previous month">&larr;</button>
+      <div class="cal-title" id="calTitle"></div>
+      <button class="calc-tab" id="calNext" aria-label="Next month">&rarr;</button>
+    </div>
+    <div class="cal-today-row"><button class="calc-tab" id="calToday">Today</button></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend"><span class="cal-dot"></span> Holiday / festival &nbsp; <span class="cal-dot cal-dot-today"></span> Today</div>
+  </div>
+  <div class="section-head" style="margin-top:36px;">
+    <div class="eyebrow">This month</div>
+    <h2>Events</h2>
+  </div>
+  <div class="calc-card"><ul class="cal-list" id="calList"></ul></div>
+</section>
+
+  
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Tools</div>
+      <h2>QR Code Generator</h2>
+      <p>Scan the code to open DailyBoard first, then your link.</p>
+    </div>
+    <div class="calc-card">
+      <div class="field-row">
+        <div class="field" style="grid-column:1/-1;">
+          <label for="qrInput">Link or text</label>
+          <input type="text" id="qrInput" placeholder="https://example.com" value="https://dailyboard-acm.vercel.app">
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:14px; padding:20px 0;">
+        <div id="qrBox" style="background:#fff; padding:16px; border-radius:12px;"></div>
+        <button id="qrDownload" class="calc-tab" aria-selected="true" style="cursor:pointer;">Download PNG</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Tools</div>
+      <h2>Time Zone Converter</h2>
+      <p>Pick a date &amp; time and see it across major world time zones.</p>
+    </div>
+    <div class="calc-card">
+      <div class="field-row">
+        <div class="field" style="grid-column:1/-1;">
+          <label for="tzInput">Date &amp; Time (your local time)</label>
+          <input type="datetime-local" id="tzInput">
+        </div>
+      </div>
+      <div class="board-grid light-tiles" id="tzGrid"></div>
+    </div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a> &middot; <a href="/guides">Guides</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>'; if (window.lucide) lucide.createIcons(); }
+  function updateParticleVisibility(){
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.getElementById('particleCanvas').style.opacity = isDark ? '1' : '0';
+  }
+  applyThemeIcon();
+  updateParticleVisibility();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
+    updateParticleVisibility();
+  });
+
+  // ---- Particle network background (dark mode only) ----
+  (function(){
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let w, h, particles;
+    function resize(){
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    const COUNT = 60;
+    particles = Array.from({length: COUNT}, () => ({
+      x: Math.random() * w, y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35
+    }));
+    function animate(){
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+      });
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.6, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(160,190,255,0.95)';
+        ctx.shadowBlur = 12; ctx.shadowColor = 'rgba(93,140,255,0.9)';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+
+  (function(){
+    const text = 'DailyBoard';
+    const introText = document.getElementById('introText');
+    const introScreen = document.getElementById('introScreen');
+    document.body.style.overflow = 'hidden';
+    let i = 0;
+    function typeNext(){
+      if (i < text.length) {
+        introText.textContent += text[i];
+        i++;
+        setTimeout(typeNext, 90);
+      } else {
+        setTimeout(() => {
+          introScreen.style.opacity = '0';
+          setTimeout(() => {
+            introScreen.style.display = 'none';
+            document.body.style.overflow = '';
+          }, 600);
+        }, 500);
+      }
+    }
+    setTimeout(typeNext, 200);
+  })();
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const TOOL_MAP = {
+    'emi calculator': '/calculator', 'cgpa to percentage': '/calculator',
+    'age calculator': '/calculator', 'experience calculator': '/calculator',
+    'currency converter': '/calculator', 'unit converter': '/calculator',
+    'bmi calculator': '/calculator', 'simple interest': '/calculator',
+    'compound interest': '/calculator', 'tax calculator': '/calculator',
+    'percentage calculator': '/calculator', 'sip calculator': '/calculator',
+    'gst calculator': '/calculator', 'discount calculator': '/calculator',
+    'word count': '/calculator',
+    'weather': '/weather', 'gold rate': '/rates', 'silver rate': '/rates',
+    'platinum rate': '/rates', 'to-do list': '/todo'
+  };
+  const toolSearch = document.getElementById('toolSearch');
+  function jumpToTool(){
+    const key = toolSearch.value.trim().toLowerCase();
+    if (TOOL_MAP[key]) window.location.href = TOOL_MAP[key];
+  }
+  toolSearch.addEventListener('change', jumpToTool);
+  toolSearch.addEventListener('keydown', (e) => { if (e.key === 'Enter') jumpToTool(); });
+
+  
+
+  const TROY_OUNCE_GRAMS = 31.1034768;
+  const TICKER_CACHE_KEY = 'dailyboard_metals_cache_v2';
+  const TICKER_CACHE_MS = 30 * 60 * 1000;
+
+  async function fetchMetalUSD(symbol){
+    const res = await fetch(`https://api.gold-api.com/price/${symbol}`);
+    if (!res.ok) throw new Error('metal fetch failed');
+    const data = await res.json();
+    return data.price;
+  }
+  async function fetchUsdToInr(){
+    const res = await fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=INR');
+    if (!res.ok) throw new Error('fx fetch failed');
+    const data = await res.json();
+    return data.rates.INR;
+  }
+
+  async function loadTickerMetals(){
+    let goldUSD, silverUSD, platinumUSD, usdInr;
+    try {
+      const cached = JSON.parse(localStorage.getItem(TICKER_CACHE_KEY) || 'null');
+      if (cached && (Date.now() - cached.ts) < TICKER_CACHE_MS) {
+        ({ gold: goldUSD, silver: silverUSD, platinum: platinumUSD, usdInr } = cached);
+      } else {
+        [goldUSD, silverUSD, platinumUSD, usdInr] = await Promise.all([
+          fetchMetalUSD('XAU'), fetchMetalUSD('XAG'), fetchMetalUSD('XPT'), fetchUsdToInr()
+        ]);
+        localStorage.setItem(TICKER_CACHE_KEY, JSON.stringify({ gold: goldUSD, silver: silverUSD, platinum: platinumUSD, usdInr, ts: Date.now() }));
+      }
+    } catch(e) { return null; }
+    const MULT = 1.11;
+    const gold22 = (goldUSD / TROY_OUNCE_GRAMS) * usdInr * MULT * 0.916;
+    const silverKg = (silverUSD / TROY_OUNCE_GRAMS) * usdInr * MULT * 1000;
+    const platinumGm = (platinumUSD / TROY_OUNCE_GRAMS) * usdInr * MULT;
+    return { gold22, silverKg, platinumGm };
+  }
+
+  function buildMarquee(weatherText, metals){
+    const items = [];
+    items.push(`<a class="marquee-item" href="/weather"><i data-lucide="cloud-sun" style="width:16px;height:16px;"></i><span class="m-label">Weather</span><span class="m-val">${weatherText}</span></a>`);
+    if (metals) {
+      items.push(`<a class="marquee-item" href="/rates"><i data-lucide="coins" style="width:16px;height:16px;"></i><span class="m-label">22K Gold</span><span class="m-val">₹${Math.round(metals.gold22).toLocaleString('en-IN')}/gm</span></a>`);
+      items.push(`<a class="marquee-item" href="/rates"><i data-lucide="coins" style="width:16px;height:16px;"></i><span class="m-label">Silver</span><span class="m-val">₹${Math.round(metals.silverKg).toLocaleString('en-IN')}/kg</span></a>`);
+      items.push(`<a class="marquee-item" href="/rates"><i data-lucide="gem" style="width:16px;height:16px;"></i><span class="m-label">Platinum</span><span class="m-val">₹${Math.round(metals.platinumGm).toLocaleString('en-IN')}/gm</span></a>`);
+    } else {
+      items.push(`<a class="marquee-item" href="/rates"><span class="m-label">Rates</span><span class="m-val">Tap to view live rates →</span></a>`);
+    }
+    const html = items.join('');
+    document.getElementById('marqueeTrack').innerHTML = html + html;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function loadWeatherForTicker(lat, lon){
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`)
+      .then(r => r.json())
+      .then(async d => {
+        const weatherText = `${d.current.temperature_2m}°C`;
+        const metals = await loadTickerMetals();
+        buildMarquee(weatherText, metals);
+      })
+      .catch(async () => {
+        const metals = await loadTickerMetals();
+        buildMarquee('—', metals);
+      });
+  }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => loadWeatherForTicker(pos.coords.latitude, pos.coords.longitude),
+      () => loadWeatherForTicker(12.9716, 77.5946)
+    );
+  } else {
+    loadWeatherForTicker(12.9716, 77.5946);
+  }
+
+
+  // ---- QR code: encodes a DailyBoard redirect page, which opens the link after a short pause ----
+  function renderQR(){
+    const target = document.getElementById('qrInput').value.trim() || 'https://example.com';
+    const text = window.location.origin + '/go?to=' + encodeURIComponent(target);
+    const box = document.getElementById('qrBox');
+    box.innerHTML = '';
+    if (typeof QRCode === 'undefined') {
+      box.innerHTML = '<p style="font-size:13px; color:#b3401f; padding:20px;">QR library failed to load. Please refresh the page.</p>';
+      return;
+    }
+    const canvas = document.createElement('canvas');
+    box.appendChild(canvas);
+    QRCode.toCanvas(canvas, text, { width: 200, margin: 2, color: { dark: '#14213D', light: '#ffffff' } }, function(error){
+      if (error) box.innerHTML = '<p style="font-size:13px; color:#b3401f; padding:20px;">Could not generate a QR code for this link.</p>';
+    });
+  }
+  document.getElementById('qrInput').addEventListener('input', renderQR);
+  document.getElementById('qrDownload').addEventListener('click', () => {
+    const canvas = document.querySelector('#qrBox canvas');
+    if (!canvas) return;
+    const link = document.createElement('a');
+    link.download = 'dailyboard-qr.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+  renderQR();
+
+  const TZ_LIST = [
+    { label: 'India (IST)', zone: 'Asia/Kolkata' },
+    { label: 'New York (EST/EDT)', zone: 'America/New_York' },
+    { label: 'London (GMT/BST)', zone: 'Europe/London' },
+    { label: 'Dubai (GST)', zone: 'Asia/Dubai' },
+    { label: 'Singapore (SGT)', zone: 'Asia/Singapore' },
+    { label: 'Sydney (AEST/AEDT)', zone: 'Australia/Sydney' },
+    { label: 'Tokyo (JST)', zone: 'Asia/Tokyo' },
+    { label: 'Los Angeles (PST/PDT)', zone: 'America/Los_Angeles' }
+  ];
+  function renderTZ(){
+    const val = document.getElementById('tzInput').value;
+    const d = val ? new Date(val) : new Date();
+    const grid = document.getElementById('tzGrid');
+    grid.innerHTML = '';
+    TZ_LIST.forEach(tz => {
+      const formatted = d.toLocaleString('en-IN', {
+        timeZone: tz.zone, weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit', hour12:true
+      });
+      const tile = document.createElement('div');
+      tile.className = 'board-tile';
+      tile.innerHTML = `<div class="label">${tz.label}</div><div class="value mono" style="font-size:16px;">${formatted}</div>`;
+      grid.appendChild(tile);
+    });
+  }
+  const nowForTZ = new Date();
+  nowForTZ.setMinutes(nowForTZ.getMinutes() - nowForTZ.getTimezoneOffset());
+  document.getElementById('tzInput').value = nowForTZ.toISOString().slice(0,16);
+  document.getElementById('tzInput').addEventListener('input', renderTZ);
+  renderTZ();
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide){ lucide.createIcons(); }</script>
+<script src="chatbot.js"></script>
+<script src="scroll-theme.js"></script>
+<script src="calendar.js"></script>
+</body>
+</html>

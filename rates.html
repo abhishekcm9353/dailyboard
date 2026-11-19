@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rates | DailyBoard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7556060817055750" crossorigin="anonymous"></script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav>
+  <a href="/home" class="brand">Daily<span>Board</span></a>
+  <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false"><i data-lucide="menu"></i></button>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i data-lucide="moon"></i></button>
+  <div class="navlinks" id="navLinks">
+    <a href="/home">Home</a>
+    <a href="/weather">Weather</a>
+    <a href="/rates" class="current">Rates</a>
+    <a href="/calculator">Calculators</a>
+    <a href="/calendar">Calendar</a>
+    <a href="/news">News</a>
+    <a href="/fun">Fun</a>
+    <a href="/todo">To-Do</a>
+    <a href="/about">About</a>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="board-wrap">
+    <div class="board">
+      <div class="board-eyebrow">— Live Rates —</div>
+      <h1>Gold, Silver &amp; Platinum</h1>
+      <p class="tagline">Live spot prices, converted to INR, updated automatically.</p>
+    </div>
+  </div>
+
+  <div class="ticker-bar" id="tickerBar">
+    <div class="ticker-item"><span class="t-label">22K Gold</span> Loading…</div>
+    <div class="ticker-item"><span class="t-label">Silver</span> Loading…</div>
+    <div class="ticker-item"><span class="t-label">Platinum</span> Loading…</div>
+    <div class="ticker-item"><span class="t-label">USD</span> Loading…</div>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Live Rates</div>
+      <h2>Gold, Silver &amp; Platinum Rate Today</h2>
+      <p id="rateDateLine">Loading today's rates…</p>
+    </div>
+
+    <div class="rate-table-wrap">
+      <table class="rate-table">
+        <thead>
+          <tr>
+            <th>Metal</th>
+            <th class="num">Per Gram</th>
+            <th class="num">Per 8 Grams</th>
+            <th class="num">Per 10 Grams</th>
+            <th class="num">Change</th>
+          </tr>
+        </thead>
+        <tbody id="rateTableBody">
+          <tr><td colspan="5">Loading live rates…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rate-caption">Rates are international spot prices converted to INR with India's import duty (~6%) and GST (3%) factored in, similar to how Indian bullion rates are quoted — but they still exclude jeweller making charges and city-specific premiums, so treat as reference rates and confirm exact prices locally before any transaction.</div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <div class="eyebrow">Live Rates</div>
+      <h2>Crypto (INR)</h2>
+      <p id="cryptoDateLine">Loading live crypto prices…</p>
+    </div>
+    <div class="rate-table-wrap">
+      <table class="rate-table">
+        <thead>
+          <tr>
+            <th>Coin</th>
+            <th class="num">Price (INR)</th>
+            <th class="num">24h Change</th>
+          </tr>
+        </thead>
+        <tbody id="cryptoTableBody">
+          <tr><td colspan="3">Loading live rates…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rate-caption">Crypto prices are highly volatile and shown for reference only — not investment advice.</div>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> DailyBoard · <a href="/privacy">Privacy Policy</a> · <a href="/contact">Contact</a> &middot; <a href="/guides">Guides</a></footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', open);
+  });
+  const themeToggle = document.getElementById('themeToggle');
+  function applyThemeIcon(){ themeToggle.innerHTML = document.documentElement.getAttribute('data-theme') === 'dark' ? '<i data-lucide="sun"></i>' : '<i data-lucide="moon"></i>'; if (window.lucide) lucide.createIcons(); }
+  applyThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (isDark) { document.documentElement.removeAttribute('data-theme'); localStorage.setItem('dailyboard_theme','light'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('dailyboard_theme','dark'); }
+    applyThemeIcon();
+  });
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const TROY_OUNCE_GRAMS = 31.1034768;
+  const CACHE_KEY = 'dailyboard_metals_cache_v2';
+  const HISTORY_KEY = 'dailyboard_metals_history_v2';
+  const CACHE_MS = 30 * 60 * 1000;
+
+  async function fetchMetalUSD(symbol){
+    const res = await fetch(`https://api.gold-api.com/price/${symbol}`);
+    if (!res.ok) throw new Error('metal fetch failed');
+    const data = await res.json();
+    return data.price;
+  }
+
+  async function fetchUsdToInr(){
+    const res = await fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=INR');
+    if (!res.ok) throw new Error('fx fetch failed');
+    const data = await res.json();
+    return data.rates.INR;
+  }
+
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+  function changeCell(current, previous){
+    if (previous == null) return '<span class="change-flat">—</span>';
+    const diff = current - previous;
+    if (Math.abs(diff) < 0.5) return '<span class="change-flat">▬ No change</span>';
+    const cls = diff > 0 ? 'change-up' : 'change-down';
+    const arrow = diff > 0 ? '▲' : '▼';
+    return `<span class="${cls}">${arrow} ₹${Math.abs(Math.round(diff)).toLocaleString('en-IN')}</span>`;
+  }
+
+  async function loadMetals(){
+    let goldUSD, silverUSD, platinumUSD, usdInr, updatedAt;
+    try {
+      const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+      if (cached && (Date.now() - cached.ts) < CACHE_MS) {
+        ({ gold: goldUSD, silver: silverUSD, platinum: platinumUSD, usdInr } = cached);
+        updatedAt = new Date(cached.ts);
+      } else {
+        [goldUSD, silverUSD, platinumUSD, usdInr] = await Promise.all([
+          fetchMetalUSD('XAU'), fetchMetalUSD('XAG'), fetchMetalUSD('XPT'), fetchUsdToInr()
+        ]);
+        updatedAt = new Date();
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ gold: goldUSD, silver: silverUSD, platinum: platinumUSD, usdInr, ts: updatedAt.getTime() }));
+      }
+    } catch (e) {
+      document.getElementById('rateTableBody').innerHTML = '<tr><td colspan="5">Live rate feed unavailable right now — please refresh in a bit.</td></tr>';
+      document.getElementById('tickerBar').innerHTML = '<div class="ticker-item">Live rates unavailable</div>';
+      return;
+    }
+
+    // International spot converted to INR, then adjusted for India's import duty (~6%) and GST (3%)
+    // so the numbers land close to what Indian sites (GoodReturns etc.) quote, minus city-specific making charges.
+    const INDIA_DUTY_GST_MULTIPLIER = 1.11;
+    const goldPerGram24k = (goldUSD / TROY_OUNCE_GRAMS) * usdInr * INDIA_DUTY_GST_MULTIPLIER;
+    const goldPerGram22k = goldPerGram24k * 0.916;
+    const goldPerGram18k = goldPerGram24k * 0.75;
+    const silverPerGram = (silverUSD / TROY_OUNCE_GRAMS) * usdInr * INDIA_DUTY_GST_MULTIPLIER;
+    const platinumPerGram = (platinumUSD / TROY_OUNCE_GRAMS) * usdInr * INDIA_DUTY_GST_MULTIPLIER;
+
+    const today = todayStr();
+    let history = JSON.parse(localStorage.getItem(HISTORY_KEY) || 'null');
+    const prev = (history && history.date !== today) ? history : (history && history.date === today ? history.prevOfDay : null);
+    if (!history || history.date !== today) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify({
+        date: today,
+        prevOfDay: history || null,
+        gold24: goldPerGram24k, gold22: goldPerGram22k, gold18: goldPerGram18k,
+        silver: silverPerGram, platinum: platinumPerGram
+      }));
+    }
+    const prevData = prev;
+
+    document.getElementById('tickerBar').innerHTML = `
+      <div class="ticker-item"><span class="t-label">22K Gold</span> ₹${Math.round(goldPerGram22k).toLocaleString('en-IN')}/gm</div>
+      <div class="ticker-item"><span class="t-label">Silver</span> ₹${Math.round(silverPerGram*1000).toLocaleString('en-IN')}/kg</div>
+      <div class="ticker-item"><span class="t-label">Platinum</span> ₹${Math.round(platinumPerGram).toLocaleString('en-IN')}/gm</div>
+      <div class="ticker-item"><span class="t-label">USD</span> ₹${usdInr.toFixed(2)}</div>
+    `;
+
+    document.getElementById('rateDateLine').textContent =
+      `Live rates as of ${updatedAt.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}, ${updatedAt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`;
+
+    function row(name, perGram, prevPerGram){
+      return `<tr>
+        <td>${name}</td>
+        <td class="num">₹${Math.round(perGram).toLocaleString('en-IN')}</td>
+        <td class="num">₹${Math.round(perGram*8).toLocaleString('en-IN')}</td>
+        <td class="num">₹${Math.round(perGram*10).toLocaleString('en-IN')}</td>
+        <td class="num">${changeCell(perGram, prevPerGram ? prevPerGram : null)}</td>
+      </tr>`;
+    }
+
+    document.getElementById('rateTableBody').innerHTML =
+      row('Gold 24K (99.9%)', goldPerGram24k, prevData ? prevData.gold24 : null) +
+      row('Gold 22K (91.6%)', goldPerGram22k, prevData ? prevData.gold22 : null) +
+      row('Gold 18K (75%)', goldPerGram18k, prevData ? prevData.gold18 : null) +
+      row('Silver', silverPerGram, prevData ? prevData.silver : null) +
+      row('Platinum', platinumPerGram, prevData ? prevData.platinum : null);
+  }
+
+  loadMetals();
+
+  // ---- Crypto (CoinGecko, free, no key) ----
+  async function loadCrypto(){
+    try {
+      const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=inr&include_24hr_change=true');
+      if (!res.ok) throw new Error('crypto fetch failed');
+      const data = await res.json();
+      const now = new Date();
+      document.getElementById('cryptoDateLine').textContent =
+        `Live rates as of ${now.toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}, ${now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`;
+
+      function cryptoRow(name, price, change){
+        const cls = change > 0 ? 'change-up' : change < 0 ? 'change-down' : 'change-flat';
+        const arrow = change > 0 ? '▲' : change < 0 ? '▼' : '▬';
+        return `<tr>
+          <td>${name}</td>
+          <td class="num">₹${Math.round(price).toLocaleString('en-IN')}</td>
+          <td class="num"><span class="${cls}">${arrow} ${Math.abs(change).toFixed(2)}%</span></td>
+        </tr>`;
+      }
+      document.getElementById('cryptoTableBody').innerHTML =
+        cryptoRow('Bitcoin (BTC)', data.bitcoin.inr, data.bitcoin.inr_24h_change) +
+        cryptoRow('Ethereum (ETH)', data.ethereum.inr, data.ethereum.inr_24h_change);
+    } catch(e) {
+      document.getElementById('cryptoTableBody').innerHTML = '<tr><td colspan="3">Live crypto feed unavailable right now — please refresh in a bit.</td></tr>';
+    }
+  }
+  loadCrypto();
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>if(window.lucide){ lucide.createIcons(); }</script>
+<script src="chatbot.js"></script>
+<script src="scroll-theme.js"></script>
+</body>
+</html>

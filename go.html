@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Opening link | DailyBoard</title>
+<link rel="stylesheet" href="style.css">
+<script>(function(){try{if(localStorage.getItem("dailyboard_theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+</head>
+<body>
+<main style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;">
+  <div class="calc-card" style="max-width:460px; width:100%; text-align:center;">
+    <div class="eyebrow">DailyBoard</div>
+    <h2 style="margin:6px 0 10px;">Opening your link</h2>
+    <p id="goMsg" style="color:rgba(34,32,27,0.7);">Redirecting in <span id="goCount">3</span> seconds...</p>
+    <p id="goUrl" style="font-size:13px; word-break:break-all; opacity:.7;"></p>
+    <div style="display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap;">
+      <a id="goOpen" class="calc-tab" href="/home" style="text-decoration:none;">Open now</a>
+      <a class="calc-tab" href="/home" style="text-decoration:none;">Back to DailyBoard</a>
+    </div>
+  </div>
+</main>
+<script>
+(function(){
+  var raw = new URLSearchParams(location.search).get('to') || '';
+  var target = null;
+  try { var u = new URL(raw); if (u.protocol === 'http:' || u.protocol === 'https:') target = u.href; } catch(e) {}
+  var openBtn = document.getElementById('goOpen');
+  if (!target) {
+    document.getElementById('goMsg').textContent = 'No valid link was provided.';
+    openBtn.style.display = 'none';
+    return;
+  }
+  document.getElementById('goUrl').textContent = target;
+  openBtn.href = target;
+  var n = 3, el = document.getElementById('goCount');
+  var timer = setInterval(function(){
+    n--; el.textContent = n;
+    if (n <= 0) { clearInterval(timer); location.replace(target); }
+  }, 1000);
+  openBtn.addEventListener('click', function(){ clearInterval(timer); });
+})();
+</script>
+</body>
+</html>
